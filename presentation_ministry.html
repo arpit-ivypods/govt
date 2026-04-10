@@ -1,0 +1,3385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SpeakX × MSDE & NCVET — Making India's Workforce Employment-Ready Through AI</title>
+<style>
+/* ═══════════════════════════════════════════════
+   TOKENS & RESET
+   ═══════════════════════════════════════════════ */
+:root {
+  --bg-deep: #0a1628;
+  --bg-card: rgba(10, 22, 40, 0.75);
+  --bg-glass: rgba(255, 255, 255, 0.05);
+  --border-glass: rgba(255, 255, 255, 0.1);
+
+  --neon-blue: #3d9be0;
+  --neon-violet: #e87722;
+  --neon-orange: #e87722;
+  --neon-gold: #d4a017;
+  --neon-green: #2eaa5a;
+
+  --saffron: #e87722;
+  --navy: #1a3a5c;
+  --green-india: #1a8a4a;
+
+  --text-primary: #e0e6f0;
+  --text-muted: #8a96a8;
+  --text-accent: var(--neon-blue);
+
+  --glow-blue: 0 0 20px rgba(61, 155, 224, 0.25);
+  --glow-violet: 0 0 20px rgba(232, 119, 34, 0.25);
+  --glow-orange: 0 0 20px rgba(232, 119, 34, 0.25);
+
+  --font-display: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  --font-mono: 'SF Mono', 'Cascadia Code', 'Fira Code', monospace;
+
+  --space-xs: 0.5rem;
+  --space-sm: 1rem;
+  --space-md: 2rem;
+  --space-lg: 4rem;
+  --space-xl: 6rem;
+  --space-section: clamp(4rem, 3rem + 5vw, 8rem);
+
+  --radius-sm: 8px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+
+  --duration-fast: 200ms;
+  --duration-normal: 400ms;
+  --duration-slow: 800ms;
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ═══════════════════════════════════════════════
+   LIGHT THEME
+   ═══════════════════════════════════════════════ */
+[data-theme="light"] {
+  --bg-deep: #f0f2f5;
+  --bg-card: rgba(255, 255, 255, 0.7);
+  --bg-glass: rgba(0, 0, 0, 0.03);
+  --border-glass: rgba(0, 0, 0, 0.08);
+
+  --neon-blue: #1a5a8a;
+  --neon-violet: #c45e10;
+  --neon-orange: #c45e10;
+  --neon-gold: #8a6b00;
+  --neon-green: #147040;
+
+  --text-primary: #1a1d2e;
+  --text-muted: #5a6478;
+  --text-accent: var(--neon-blue);
+
+  --glow-blue: 0 4px 20px rgba(26, 90, 138, 0.12);
+  --glow-violet: 0 4px 20px rgba(196, 94, 16, 0.12);
+  --glow-orange: 0 4px 20px rgba(196, 94, 16, 0.12);
+}
+
+[data-theme="light"] #neural-canvas { opacity: 0.12; }
+
+[data-theme="light"] body::before {
+  background:
+    linear-gradient(rgba(26, 58, 92, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(26, 58, 92, 0.04) 1px, transparent 1px);
+}
+
+[data-theme="light"] .glass-card {
+  background: rgba(255, 255, 255, 0.6);
+  border-color: rgba(0, 0, 0, 0.06);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+[data-theme="light"] .glass-card:hover {
+  box-shadow: var(--glow-blue), 0 8px 30px rgba(0, 0, 0, 0.08);
+}
+
+[data-theme="light"] .stat-value { filter: none; }
+
+[data-theme="light"] .problem-summary {
+  background: rgba(232, 119, 34, 0.06);
+}
+
+[data-theme="light"] .hero-badge {
+  background: rgba(255, 255, 255, 0.6);
+  border-color: rgba(0, 0, 0, 0.08);
+}
+
+[data-theme="light"] .logo-strip .org {
+  background: rgba(255, 255, 255, 0.5);
+  border-color: rgba(0, 0, 0, 0.08);
+}
+
+[data-theme="light"] .proposal-quote {
+  border-color: rgba(138, 107, 0, 0.2);
+  background: rgba(138, 107, 0, 0.04);
+}
+
+[data-theme="light"] .integration-quote {
+  background: rgba(255, 255, 255, 0.5);
+  border-color: rgba(0, 0, 0, 0.06);
+}
+
+[data-theme="light"] .nav-dot {
+  border-color: rgba(0, 0, 0, 0.15);
+}
+
+[data-theme="light"] .nav-dot.active {
+  background: var(--neon-blue);
+  border-color: var(--neon-blue);
+  box-shadow: 0 0 8px rgba(26, 90, 138, 0.3);
+}
+
+[data-theme="light"] .ministry-footer {
+  background: rgba(240, 242, 245, 0.95);
+  border-top-color: rgba(0, 0, 0, 0.08);
+}
+
+[data-theme="light"] .scan-line {
+  background: linear-gradient(90deg, transparent, rgba(26, 90, 138, 0.3), transparent);
+}
+
+/* ═══════════════════════════════════════════════
+   THEME TOGGLE
+   ═══════════════════════════════════════════════ */
+.theme-toggle {
+  position: fixed;
+  top: 1.25rem;
+  right: 1.25rem;
+  z-index: 1002;
+  width: 52px;
+  height: 28px;
+  border-radius: 100px;
+  border: 1px solid var(--border-glass);
+  background: var(--bg-glass);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  padding: 3px;
+  transition: background var(--duration-normal), border-color var(--duration-normal);
+}
+
+.theme-toggle:hover { border-color: var(--neon-blue); }
+
+.theme-toggle .toggle-thumb {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--saffron);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  transition: transform var(--duration-normal) var(--ease-out-expo),
+              background var(--duration-normal);
+  transform: translateX(0);
+  box-shadow: 0 0 8px rgba(232, 119, 34, 0.25);
+  line-height: 1;
+}
+
+[data-theme="light"] .theme-toggle .toggle-thumb {
+  transform: translateX(23px);
+  background: var(--neon-blue);
+  box-shadow: 0 0 8px rgba(26, 90, 138, 0.2);
+}
+
+[data-theme="light"] .theme-toggle {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+/* ═══════════════════════════════════════════════
+   TRICOLOR BAR (GOI Trust Signal)
+   ═══════════════════════════════════════════════ */
+.tricolor-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 5px;
+  z-index: 1001;
+  display: flex;
+}
+.tricolor-bar span:nth-child(1) { flex: 1; background: #e87722; }
+.tricolor-bar span:nth-child(2) { flex: 1; background: #ffffff; }
+.tricolor-bar span:nth-child(3) { flex: 1; background: #1a8a4a; }
+
+/* ═══════════════════════════════════════════════
+   CONFIDENTIAL FOOTER
+   ═══════════════════════════════════════════════ */
+.ministry-footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 36px;
+  background: rgba(10, 22, 40, 0.95);
+  border-top: 1px solid rgba(255,255,255,0.08);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2rem;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: var(--text-muted);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  z-index: 1000;
+  backdrop-filter: blur(8px);
+}
+
+.ministry-footer .page-counter {
+  font-weight: 600;
+  color: var(--neon-blue);
+}
+
+/* ═══════════════════════════════════════════════
+   LOGO STRIP (Hero)
+   ═══════════════════════════════════════════════ */
+.logo-strip {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-top: var(--space-sm);
+  margin-bottom: var(--space-md);
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+}
+.logo-strip .org {
+  padding: 0.35rem 0.9rem;
+  border: 1px solid var(--border-glass);
+  border-radius: 6px;
+  background: var(--bg-glass);
+  backdrop-filter: blur(8px);
+}
+.logo-strip .sep {
+  color: var(--text-muted);
+  font-size: 0.8rem;
+}
+
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+}
+
+body {
+  font-family: var(--font-display);
+  background: var(--bg-deep);
+  color: var(--text-primary);
+  overflow-x: hidden;
+  line-height: 1.6;
+}
+
+/* ═══════════════════════════════════════════════
+   NEURAL NETWORK BACKGROUND
+   ═══════════════════════════════════════════════ */
+#neural-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+/* Grid overlay */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    linear-gradient(rgba(61, 155, 224, 0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(61, 155, 224, 0.025) 1px, transparent 1px);
+  background-size: 60px 60px;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* ═══════════════════════════════════════════════
+   SCROLLBAR
+   ═══════════════════════════════════════════════ */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg-deep); }
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(var(--neon-blue), var(--saffron));
+  border-radius: 3px;
+}
+
+/* ═══════════════════════════════════════════════
+   LAYOUT
+   ═══════════════════════════════════════════════ */
+.section {
+  position: relative;
+  z-index: 2;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: var(--space-section) clamp(1.5rem, 5vw, 6rem);
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity var(--duration-slow) var(--ease-out-expo),
+              transform var(--duration-slow) var(--ease-out-expo);
+}
+
+.section.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.section-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* ═══════════════════════════════════════════════
+   TYPOGRAPHY
+   ═══════════════════════════════════════════════ */
+.section-label {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--neon-blue);
+  margin-bottom: var(--space-sm);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.section-label::before {
+  content: '';
+  display: inline-block;
+  width: 24px;
+  height: 1px;
+  background: var(--neon-blue);
+}
+
+.headline {
+  font-size: clamp(2.5rem, 1.5rem + 4vw, 5rem);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin-bottom: var(--space-md);
+}
+
+.headline .highlight,
+.hero-headline .highlight {
+  background: linear-gradient(135deg, var(--saffron), #f5a623);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.subheadline {
+  font-size: clamp(1.1rem, 0.9rem + 0.8vw, 1.4rem);
+  color: var(--text-muted);
+  max-width: 700px;
+  line-height: 1.6;
+}
+
+/* ═══════════════════════════════════════════════
+   GLASS CARDS
+   ═══════════════════════════════════════════════ */
+.glass-card {
+  background: var(--bg-glass);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-md);
+  padding: var(--space-md);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transition: transform var(--duration-normal) var(--ease-out-expo),
+              border-color var(--duration-normal),
+              box-shadow var(--duration-normal);
+}
+
+.glass-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(61, 155, 224, 0.2);
+  box-shadow: var(--glow-blue);
+}
+
+.glass-card.violet:hover {
+  border-color: rgba(232, 119, 34, 0.2);
+  box-shadow: var(--glow-violet);
+}
+
+.glass-card.orange:hover {
+  border-color: rgba(232, 119, 34, 0.2);
+  box-shadow: var(--glow-orange);
+}
+
+/* ═══════════════════════════════════════════════
+   SECTION 1: HERO
+   ═══════════════════════════════════════════════ */
+#hero {
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  padding-top: 0;
+}
+
+#hero {
+  padding-top: clamp(3rem, 4vw, 6rem);
+}
+#hero .section-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 1rem;
+  border: 1px solid var(--border-glass);
+  border-radius: 100px;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  background: var(--bg-glass);
+  margin-bottom: var(--space-md);
+  backdrop-filter: blur(8px);
+}
+
+.hero-badge .dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--neon-green);
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; box-shadow: 0 0 4px var(--neon-green); }
+  50% { opacity: 0.5; box-shadow: 0 0 12px var(--neon-green); }
+}
+
+.hero-headline {
+  font-size: clamp(3rem, 1.5rem + 6vw, 6rem);
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  margin-bottom: var(--space-md);
+  max-width: 900px;
+}
+
+.hero-sub {
+  font-size: clamp(1rem, 0.8rem + 0.8vw, 1.3rem);
+  color: var(--text-muted);
+  max-width: 600px;
+  margin-bottom: var(--space-lg);
+}
+
+.hero-meta {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  letter-spacing: 0.1em;
+  opacity: 0.6;
+}
+
+/* Voice wave animation */
+.voice-wave {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  height: 40px;
+  margin-bottom: var(--space-md);
+}
+
+.voice-wave .bar {
+  width: 4px;
+  border-radius: 4px;
+  background: #e87722;
+  animation: wave-bar 1.2s ease-in-out infinite;
+}
+
+/* Tricolor wave: first third saffron, middle third white, last third green */
+.voice-wave .bar:nth-child(n+9):nth-child(-n+16) {
+  background: #ffffff;
+}
+.voice-wave .bar:nth-child(n+17) {
+  background: #1a8a4a;
+}
+
+@keyframes wave-bar {
+  0%, 100% { height: 8px; opacity: 0.4; }
+  50% { height: 32px; opacity: 1; }
+}
+
+/* Scanning line */
+.scan-line {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--neon-blue), transparent);
+  opacity: 0.3;
+  animation: scan 4s linear infinite;
+}
+
+@keyframes scan {
+  0% { top: 0; }
+  100% { top: 100%; }
+}
+
+/* ═══════════════════════════════════════════════
+   SECTION 2: THE PROBLEM
+   ═══════════════════════════════════════════════ */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: var(--space-md);
+  margin-top: var(--space-lg);
+}
+
+.stat-card {
+  text-align: center;
+  padding: var(--space-md) var(--space-sm);
+}
+
+.stat-value {
+  font-size: clamp(3rem, 2rem + 3vw, 5rem);
+  font-weight: 800;
+  line-height: 1;
+  margin-bottom: var(--space-xs);
+  background: linear-gradient(135deg, var(--saffron), #f5a623);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 20px rgba(61, 155, 224, 0.25));
+}
+
+.stat-label {
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  margin-bottom: var(--space-xs);
+}
+
+.stat-source {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: rgba(136, 146, 168, 0.5);
+}
+
+.problem-summary {
+  margin-top: var(--space-lg);
+  padding: var(--space-md);
+  border-left: 3px solid var(--neon-orange);
+  background: rgba(232, 119, 34, 0.06);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  color: var(--text-muted);
+  font-size: 1.1rem;
+}
+
+/* ═══════════════════════════════════════════════
+   SECTION 3: THE SOLUTION
+   ═══════════════════════════════════════════════ */
+.solution-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--space-md);
+  margin-top: var(--space-lg);
+}
+
+.solution-card .card-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  margin-bottom: var(--space-sm);
+  background: rgba(61, 155, 224, 0.1);
+  border: 1px solid rgba(61, 155, 224, 0.2);
+}
+
+.solution-card.violet .card-icon {
+  background: rgba(232, 119, 34, 0.1);
+  border-color: rgba(232, 119, 34, 0.2);
+}
+
+.solution-card.orange .card-icon {
+  background: rgba(232, 119, 34, 0.1);
+  border-color: rgba(232, 119, 34, 0.2);
+}
+
+.solution-card h3 {
+  font-size: 1.2rem;
+  margin-bottom: var(--space-xs);
+}
+
+.solution-card ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.solution-card li {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  padding-left: 1.2rem;
+  position: relative;
+}
+
+.solution-card li::before {
+  content: '▸';
+  position: absolute;
+  left: 0;
+  color: var(--neon-blue);
+}
+
+.solution-card.violet li::before { color: var(--neon-violet); }
+.solution-card.orange li::before { color: var(--neon-orange); }
+
+.made-in-india {
+  text-align: center;
+  margin-top: var(--space-lg);
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: var(--neon-gold);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+/* ═══════════════════════════════════════════════
+   SECTION 4: THE PRODUCT
+   ═══════════════════════════════════════════════ */
+.product-layout {
+  display: grid;
+  grid-template-columns: 1fr 1.6fr;
+  gap: var(--space-lg);
+  align-items: start;
+  margin-top: var(--space-lg);
+}
+
+.product-phone {
+  position: sticky;
+  top: 2rem;
+  display: flex;
+  justify-content: center;
+}
+
+.product-phone img {
+  width: 100%;
+  max-width: 320px;
+  border-radius: 1.5rem;
+  box-shadow:
+    0 8px 40px rgba(0,0,0,0.18),
+    0 0 60px rgba(232,119,34,0.08);
+  transition: transform var(--duration-normal) var(--ease-out-expo);
+}
+
+.product-phone img:hover {
+  transform: scale(1.02);
+}
+
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-sm);
+}
+
+.product-card {
+  padding: var(--space-md);
+  position: relative;
+  overflow: hidden;
+}
+
+.product-card .card-number {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: var(--neon-blue);
+  opacity: 0.5;
+  margin-bottom: var(--space-xs);
+}
+
+.product-card h3 {
+  font-size: 1.05rem;
+  margin-bottom: 0.5rem;
+}
+
+.product-card p {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+/* ═══════════════════════════════════════════════
+   SECTION 5: WHY SPEAKX (TRACTION)
+   ═══════════════════════════════════════════════ */
+.traction-hero {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--space-md);
+  margin: var(--space-lg) 0;
+}
+
+.traction-stat {
+  text-align: center;
+}
+
+.traction-stat .counter {
+  font-size: clamp(2.5rem, 2rem + 2vw, 4rem);
+  font-weight: 800;
+  line-height: 1;
+  margin-bottom: 0.25rem;
+}
+
+.traction-stat:nth-child(1) .counter { color: var(--neon-blue); }
+.traction-stat:nth-child(2) .counter { color: var(--neon-violet); }
+.traction-stat:nth-child(3) .counter { color: var(--neon-orange); }
+.traction-stat:nth-child(4) .counter { color: var(--neon-green); }
+.traction-stat:nth-child(5) .counter { color: var(--neon-gold); }
+
+.traction-stat .label {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.traction-sub {
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  opacity: 0.6;
+  margin-bottom: var(--space-lg);
+}
+
+/* Demographics */
+.demo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--space-sm);
+}
+
+.demo-card {
+  padding: var(--space-md);
+  text-align: center;
+}
+
+.demo-card .demo-value {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--neon-blue);
+  margin-bottom: 0.25rem;
+}
+
+.demo-card .demo-label {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+/* ═══════════════════════════════════════════════
+   SECTION 6: INTEGRATION (INDIA MAP)
+   ═══════════════════════════════════════════════ */
+.integration-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-lg);
+  align-items: start;
+  margin-top: var(--space-lg);
+}
+
+@media (max-width: 900px) {
+  .integration-layout { grid-template-columns: 1fr; }
+}
+
+.integration-cards {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.integration-card {
+  padding: var(--space-md);
+  border-left: 3px solid var(--neon-orange);
+}
+
+.integration-card:nth-child(2) { border-left-color: var(--neon-orange); }
+.integration-card:nth-child(3) { border-left-color: var(--neon-orange); }
+
+.integration-card h3 {
+  font-size: 1.1rem;
+  margin-bottom: 0.25rem;
+}
+
+.integration-card .card-sub {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--neon-orange);
+  margin-bottom: 0.5rem;
+  letter-spacing: 0.05em;
+}
+
+.integration-card ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.integration-card li {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  padding-left: 1rem;
+  position: relative;
+}
+
+.integration-card li::before {
+  content: '›';
+  position: absolute;
+  left: 0;
+  color: var(--text-muted);
+}
+
+/* India Map */
+.map-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.india-map-svg {
+  width: 100%;
+  max-width: 600px;
+  filter: drop-shadow(0 0 30px rgba(61, 155, 224, 0.15));
+}
+
+.map-dot {
+  animation: map-pulse 2s ease-in-out infinite;
+}
+
+@keyframes map-pulse {
+  0%, 100% { r: 4; opacity: 0.8; }
+  50% { r: 7; opacity: 1; }
+}
+
+.integration-quote {
+  margin-top: var(--space-lg);
+  text-align: center;
+  font-style: italic;
+  font-size: 1rem;
+  color: var(--text-muted);
+  padding: var(--space-md);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-md);
+  background: var(--bg-glass);
+}
+
+/* ═══════════════════════════════════════════════
+   SECTION 7: THE PROPOSAL
+   ═══════════════════════════════════════════════ */
+.proposal-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-lg);
+  margin-top: var(--space-lg);
+}
+
+@media (max-width: 800px) {
+  .proposal-grid { grid-template-columns: 1fr; }
+}
+
+.proposal-block h3 {
+  font-size: 1.1rem;
+  margin-bottom: var(--space-sm);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.proposal-block h3 .icon-circle {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  background: rgba(61, 155, 224, 0.1);
+  border: 1px solid rgba(61, 155, 224, 0.2);
+  flex-shrink: 0;
+}
+
+.proposal-block ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.proposal-block li {
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  padding-left: 1.2rem;
+  position: relative;
+}
+
+.proposal-block li::before {
+  content: '▹';
+  position: absolute;
+  left: 0;
+  color: var(--neon-blue);
+}
+
+.proposal-block li strong {
+  color: var(--text-primary);
+}
+
+.proposal-quote {
+  grid-column: 1 / -1;
+  text-align: center;
+  font-size: clamp(1rem, 0.8rem + 0.8vw, 1.3rem);
+  color: var(--neon-gold);
+  font-style: italic;
+  padding: var(--space-md);
+  border: 1px solid rgba(212, 160, 23, 0.2);
+  border-radius: var(--radius-md);
+  background: rgba(212, 160, 23, 0.04);
+  margin-top: var(--space-md);
+}
+
+/* ═══════════════════════════════════════════════
+   SECTION 8: THANK YOU
+   ═══════════════════════════════════════════════ */
+#thankyou {
+  text-align: center;
+  align-items: center;
+}
+
+.thankyou-headline {
+  font-size: clamp(2.5rem, 1.5rem + 4vw, 5rem);
+  font-weight: 800;
+  background: linear-gradient(135deg, var(--neon-blue), var(--saffron), var(--green-india));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: var(--space-md);
+}
+
+.contact-card {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-md) var(--space-lg);
+  margin-top: var(--space-md);
+}
+
+.contact-card .name {
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.contact-card .role {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.contact-card .contact-links {
+  display: flex;
+  gap: var(--space-sm);
+  margin-top: var(--space-xs);
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+}
+
+.contact-card .contact-links a {
+  color: var(--neon-blue);
+  text-decoration: none;
+  transition: color var(--duration-fast);
+}
+
+.contact-card .contact-links a:hover {
+  color: var(--neon-violet);
+}
+
+.brand-link {
+  margin-top: var(--space-lg);
+  font-family: var(--font-mono);
+  font-size: 1rem;
+  letter-spacing: 0.1em;
+}
+
+.brand-link a {
+  color: var(--neon-blue);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(61, 155, 224, 0.3);
+  padding-bottom: 2px;
+  transition: border-color var(--duration-fast);
+}
+
+.brand-link a:hover {
+  border-color: var(--neon-blue);
+}
+
+/* ═══════════════════════════════════════════════
+   PROGRESS BAR
+   ═══════════════════════════════════════════════ */
+.progress-bar {
+  position: fixed;
+  top: 5px;
+  left: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #e87722, #ffffff, #1a8a4a);
+  z-index: 999;
+  width: 0%;
+  transition: width 100ms linear;
+}
+
+/* ═══════════════════════════════════════════════
+   NAV DOTS
+   ═══════════════════════════════════════════════ */
+.nav-dots {
+  position: fixed;
+  right: 1.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.nav-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: transparent;
+  cursor: pointer;
+  transition: all var(--duration-normal);
+  position: relative;
+}
+
+.nav-dot.active {
+  background: var(--neon-blue);
+  border-color: var(--neon-blue);
+  box-shadow: 0 0 10px var(--neon-blue);
+}
+
+.nav-dot:hover {
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.nav-dot::after {
+  content: attr(data-label);
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity var(--duration-fast);
+  pointer-events: none;
+}
+
+.nav-dot:hover::after {
+  opacity: 1;
+}
+
+/* ═══════════════════════════════════════════════
+   TYPING CURSOR
+   ═══════════════════════════════════════════════ */
+.typing-cursor::after {
+  content: '|';
+  animation: blink-cursor 0.8s step-end infinite;
+  color: var(--neon-blue);
+  font-weight: 300;
+}
+
+@keyframes blink-cursor {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+/* ═══════════════════════════════════════════════
+   WALKTHROUGH DEMO — Interactive Animated
+   ═══════════════════════════════════════════════ */
+.walkthrough-layout {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 60px;
+}
+/* Left controls panel */
+.wt-controls {
+  width: 340px; flex-shrink: 0;
+}
+.wt-controls-label {
+  font-size: 11px; text-transform: uppercase; letter-spacing: 0.2em;
+  color: var(--neon-blue); margin-bottom: 8px; display: flex; align-items: center; gap: 8px;
+}
+.wt-controls-label::before {
+  content: ''; display: block; width: 24px; height: 1px; background: var(--neon-blue);
+}
+.wt-controls-title {
+  font-size: 28px; font-weight: 700; color: var(--text-primary); line-height: 1.15; letter-spacing: -0.02em;
+}
+.wt-controls-title .highlight {
+  background: linear-gradient(135deg, #e87722, #f5a623);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+}
+.wt-controls-sub {
+  font-size: 14px; color: var(--text-muted); margin-top: 12px; line-height: 1.6; max-width: 320px;
+}
+.wt-screen-list {
+  display: flex; flex-direction: column; gap: 6px; margin: 24px 0;
+}
+.wt-screen-card {
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px 16px; border-radius: 12px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.06);
+  cursor: pointer; transition: all 0.2s ease;
+}
+.wt-screen-card.active {
+  background: rgba(232,119,34,0.12);
+  border-color: rgba(232,119,34,0.3);
+}
+.wt-screen-card-icon {
+  width: 36px; height: 36px; border-radius: 10px; flex-shrink: 0;
+  background: rgba(255,255,255,0.05);
+  display: flex; align-items: center; justify-content: center; font-size: 18px;
+}
+.wt-screen-card.active .wt-screen-card-icon {
+  background: rgba(232,119,34,0.2);
+}
+.wt-screen-card-name {
+  font-size: 13px; font-weight: 700; color: var(--text-primary);
+}
+.wt-screen-card.active .wt-screen-card-name { color: #f5a623; }
+.wt-screen-card-desc {
+  font-size: 11px; color: var(--text-muted); margin-top: 2px; line-height: 1.4;
+}
+.wt-screen-card-dot {
+  width: 6px; height: 6px; border-radius: 50%; background: #e87722;
+  box-shadow: 0 0 8px rgba(232,119,34,0.5); flex-shrink: 0; display: none;
+}
+.wt-screen-card.active .wt-screen-card-dot { display: block; }
+.wt-nav-buttons {
+  display: flex; gap: 10px;
+}
+.wt-nav-btn {
+  flex: 1; padding: 12px 0; border-radius: 24px; font-size: 13px; font-weight: 700;
+  cursor: pointer; transition: all 0.2s ease; text-align: center;
+}
+.wt-nav-btn.prev {
+  border: 1.5px solid rgba(255,255,255,0.15); background: transparent; color: var(--text-primary);
+}
+.wt-nav-btn.next {
+  border: none; background: #e87722; color: #fff;
+  box-shadow: 0 4px 16px rgba(232,119,34,0.3);
+}
+.wt-nav-btn:disabled {
+  opacity: 0.35; cursor: default; box-shadow: none;
+}
+.wt-nav-btn.prev:disabled { border-color: rgba(255,255,255,0.06); color: #5a6478; }
+.wt-nav-btn.next:disabled { background: rgba(255,255,255,0.06); color: #5a6478; }
+.wt-screen-counter {
+  text-align: center; margin-top: 12px; font-size: 12px; color: #5a6478;
+}
+/* Phone */
+.wt-phone {
+  width: 320px; height: 693px; border-radius: 40px; overflow: hidden;
+  position: relative;
+  box-shadow: 0 40px 80px rgba(0,0,0,0.25), 0 0 0 1px rgba(255,255,255,0.06);
+  background: #FFFAF5; display: flex; flex-direction: column;
+  font-family: 'Figtree', 'Inter', -apple-system, sans-serif; flex-shrink: 0;
+}
+[data-theme="light"] .wt-phone {
+  box-shadow: 0 40px 80px rgba(0,0,0,0.12), 0 0 0 1px rgba(0,0,0,0.08);
+}
+.wt-phone * { box-sizing: border-box; }
+.wt-home-ind {
+  position: absolute; bottom: 6px; left: 50%; transform: translateX(-50%);
+  width: 110px; height: 4px; border-radius: 2px; background: rgba(0,0,0,0.1);
+}
+.wt-statusbar {
+  height: 38px; display: flex; justify-content: space-between; align-items: center;
+  padding: 0 20px; color: #6B7280; font-size: 11px; font-weight: 600; flex-shrink: 0;
+}
+.wt-convo-header {
+  height: 50px; display: flex; align-items: center; gap: 8px;
+  padding: 0 14px; border-bottom: 1px solid #EDEDED; background: #fff; flex-shrink: 0;
+}
+.wt-avatar {
+  width: 34px; height: 34px; border-radius: 50%;
+  background: linear-gradient(135deg, #FFD84D, #F5A623);
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  box-shadow: 0 2px 6px rgba(245,166,35,0.3);
+}
+.wt-avatar-eyes { display: flex; gap: 4px; }
+.wt-avatar-eye { width: 4px; height: 5px; border-radius: 50%; background: #6F23D0; }
+.wt-header-info { flex: 1; min-width: 0; }
+.wt-header-name { font-size: 13px; font-weight: 700; color: #121212; }
+.wt-header-name span { color: #FF7100; }
+.wt-header-status { font-size: 10px; color: #02A372; font-weight: 600; display: flex; align-items: center; gap: 3px; }
+.wt-header-dot { width: 5px; height: 5px; border-radius: 50%; background: #02A372; }
+.wt-coins { padding: 2px 8px; border-radius: 20px; background: #FEF3C7; font-size: 10px; font-weight: 700; color: #92400E; flex-shrink: 0; }
+.wt-chat { flex: 1; padding: 8px 12px 0; overflow: hidden; }
+.wt-msg-row { display: flex; gap: 6px; align-items: flex-end; margin-bottom: 8px; }
+.wt-msg-row.user { justify-content: flex-end; }
+.wt-bubble-ai {
+  background: #fff; border-radius: 14px 14px 14px 4px;
+  padding: 10px; font-size: 12px; line-height: 1.45; color: #121212;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05); max-width: 82%;
+}
+.wt-bubble-user {
+  background: linear-gradient(135deg, #C084FC, #A855F7);
+  border-radius: 14px 4px 14px 14px;
+  padding: 10px; font-size: 12px; line-height: 1.45; color: #fff; max-width: 78%;
+}
+.wt-mini-avi {
+  width: 22px; height: 22px; border-radius: 50%;
+  background: linear-gradient(135deg, #FFD84D, #F5A623);
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.wt-mini-eye { width: 3px; height: 3.5px; border-radius: 50%; background: #6F23D0; }
+.wt-input-bar {
+  padding: 6px 14px 22px; background: #fff; border-top: 1px solid #F3F4F6; flex-shrink: 0;
+  display: flex; align-items: center; gap: 8px;
+}
+.wt-input-field {
+  flex: 1; padding: 8px 14px; border-radius: 20px; background: #F5F5FA;
+  border: 1px solid #E8EAF1; font-size: 12px; color: #9CA3AF;
+}
+.wt-mic-btn {
+  width: 34px; height: 34px; border-radius: 10px;
+  background: #6F23D0; display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.wt-kbd-btn {
+  width: 34px; height: 34px; border-radius: 50%; border: 1px solid #D9DBE2;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+/* FadeIn animation for messages */
+.wt-fadein {
+  opacity: 0; transform: translateY(12px); max-height: 0; overflow: hidden;
+  transition: opacity 0.4s ease, transform 0.4s ease, max-height 0.4s ease;
+  pointer-events: none;
+}
+.wt-fadein.show {
+  opacity: 1; transform: translateY(0); max-height: 500px; pointer-events: auto;
+}
+/* Typing dots */
+.wt-typing { display: flex; gap: 4px; padding: 10px 16px; background: #fff;
+  border-radius: 14px 14px 14px 4px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+.wt-typing-dot {
+  width: 6px; height: 6px; border-radius: 50%; background: #9CA3AF;
+  animation: wtTD 1.2s ease-in-out infinite;
+}
+.wt-typing-dot:nth-child(2) { animation-delay: 0.2s; }
+.wt-typing-dot:nth-child(3) { animation-delay: 0.4s; }
+@keyframes wtTD { 0%,100%{opacity:.3;transform:translateY(0)} 50%{opacity:1;transform:translateY(-3px)} }
+/* Mic pulse */
+@keyframes wtMicPulse { 0%,100%{box-shadow:0 0 0 0 rgba(195,58,61,.4)} 50%{box-shadow:0 0 0 10px rgba(195,58,61,0)} }
+@keyframes wtEq { 0%{height:8px} 100%{height:20px} }
+.wt-eq-bar { width: 3px; border-radius: 2px; background: #fff; animation: wtEq 0.8s ease-in-out infinite alternate; }
+.wt-eq-bar:nth-child(2) { animation-delay: 0.1s; }
+.wt-eq-bar:nth-child(3) { animation-delay: 0.2s; }
+.wt-eq-bar:nth-child(4) { animation-delay: 0.3s; }
+.wt-eq-bar:nth-child(5) { animation-delay: 0.4s; }
+/* Score pills */
+.wt-score-row { display: flex; gap: 5px; }
+.wt-score-pill { flex: 1; text-align: center; padding: 5px 2px; border-radius: 6px; background: #F5F5FA; }
+.wt-score-val { font-size: 13px; font-weight: 800; }
+.wt-score-lbl { font-size: 8px; color: #6B7280; font-weight: 600; margin-top: 1px; }
+/* Anagram */
+.wt-anagram-hdr { background: #F5F5FA; padding: 8px 10px; border-bottom: 1px solid #E8EAF1; }
+.wt-anagram-body { padding: 10px 12px; }
+.wt-letter-slots { display: flex; gap: 5px; justify-content: center; margin-bottom: 10px; }
+.wt-slot {
+  width: 34px; height: 38px; border-radius: 6px;
+  border: 2px solid #E8EAF1; background: #F5F5FA;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 17px; font-weight: 800; color: #121212; transition: all 0.3s ease;
+}
+.wt-slot.filled { border-color: #FF4D00; background: #FFF5ED; }
+.wt-slot.done { border-color: #02A372; background: #E6F7F0; color: #02A372; }
+.wt-scramble { display: flex; gap: 6px; justify-content: center; }
+.wt-chip {
+  width: 36px; height: 38px; border-radius: 6px;
+  border: 1.5px solid #2D2D38; background: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 17px; font-weight: 700; color: #121212;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.06); transition: all 0.15s ease;
+}
+.wt-chip.used { border: 1.5px dashed #D9DBE2; color: #D9DBE2; background: #F5F5FA; box-shadow: none; }
+/* MCQ */
+.wt-exercise-header {
+  padding: 6px 14px; background: #fff; border-bottom: 1px solid #EDEDED; flex-shrink: 0;
+}
+.wt-progress-track { height: 4px; border-radius: 2px; background: #E8EAF1; overflow: hidden; margin-top: 6px; }
+.wt-progress-fill { height: 100%; border-radius: 2px; background: #FF4D00; transition: width 0.5s ease; }
+.wt-mcq-prompt { text-align: center; margin-bottom: 14px; }
+.wt-mcq-prompt h3 { font-size: 17px; font-weight: 700; color: #121212; line-height: 1.3; margin: 0 0 4px; }
+.wt-mcq-prompt p { font-size: 12px; color: #6B7280; margin: 0; }
+.wt-mcq-option {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 12px; border-radius: 14px; border: 2px solid #EDEDED;
+  background: #fff; margin-bottom: 6px; min-height: 46px; transition: all 0.3s ease;
+}
+.wt-mcq-circle {
+  width: 24px; height: 24px; border-radius: 50%; flex-shrink: 0;
+  border: 2px solid #D9DBE2; display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 700; color: #6B7280; transition: all 0.3s ease;
+}
+.wt-mcq-text { font-size: 15px; font-weight: 600; color: #121212; }
+.wt-pill-cta {
+  width: 100%; height: 48px; border-radius: 24px; border: none;
+  background: #CFD2DB; color: #fff; font-size: 14px; font-weight: 600;
+  display: flex; align-items: center; justify-content: center; transition: all 0.3s ease;
+}
+.wt-pill-cta.active { background: #2D2D38; }
+/* Summary */
+.wt-xp-header {
+  background: linear-gradient(135deg, #FF4D00, #FF7100);
+  padding: 10px; color: #fff; text-align: center; border-radius: 14px 14px 0 0;
+}
+.wt-stat-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 5px; margin-bottom: 8px; }
+.wt-stat-item { text-align: center; padding: 6px 2px; border-radius: 10px; background: #F5F5FA; }
+.wt-streak-bar {
+  display: flex; align-items: center; gap: 8px;
+  padding: 6px 8px; border-radius: 10px; background: #FEF3C7; border: 1.5px solid #FDE68A; margin-bottom: 7px;
+}
+.wt-streak-dot { width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 7px; font-weight: 800; }
+.wt-streak-dot.done { background: #FF4D00; color: #fff; }
+.wt-streak-dot.pending { background: #FEF3C7; border: 1.5px dashed #FCD34D; color: #D97706; }
+/* Hidden screens */
+.wt-screen { display: none; flex-direction: column; height: 100%; }
+.wt-screen.active { display: flex; }
+
+@media (max-width: 1024px) {
+  .walkthrough-layout { gap: 32px; }
+  .wt-controls { width: 300px; }
+  .wt-controls-title { font-size: 24px; }
+  .wt-controls-sub { font-size: 13px; }
+  .wt-screen-card-desc { font-size: 10px; }
+}
+@media (max-width: 768px) {
+  .walkthrough-layout { flex-direction: column; gap: var(--space-md); align-items: center; }
+  .wt-controls { width: 100%; max-width: 400px; }
+  .wt-screen-list { display: flex; flex-direction: row; flex-wrap: wrap; gap: 6px; }
+  .wt-screen-card { padding: 8px 12px; }
+  .wt-screen-card-desc { display: none; }
+  .wt-screen-card-icon { width: 28px; height: 28px; font-size: 14px; }
+}
+@media (max-width: 480px) {
+  .wt-phone { width: 280px; height: 607px; border-radius: 36px; }
+  .wt-controls { max-width: 280px; }
+  .wt-controls-title { font-size: 20px; }
+  .wt-nav-btn { font-size: 12px; padding: 10px 0; }
+}
+
+/* ═══════════════════════════════════════════════
+   MULTI-LANGUAGE DEMO
+   ═══════════════════════════════════════════════ */
+.ml-layout {
+  display: flex; align-items: center; justify-content: center; gap: 60px;
+}
+.ml-left { width: 400px; flex-shrink: 0; }
+.ml-label {
+  font-size: 11px; text-transform: uppercase; letter-spacing: 0.2em;
+  color: var(--neon-blue); margin-bottom: 8px; display: flex; align-items: center; gap: 8px;
+}
+.ml-label::before { content: ''; display: block; width: 24px; height: 1px; background: var(--neon-blue); }
+.ml-title {
+  font-size: 28px; font-weight: 700; color: var(--text-primary); line-height: 1.15; letter-spacing: -0.02em;
+}
+.ml-title .highlight {
+  background: linear-gradient(135deg, #e87722, #f5a623);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+}
+.ml-sub { font-size: 14px; color: var(--text-muted); margin-top: 12px; line-height: 1.6; max-width: 380px; }
+.ml-langs { display: flex; flex-wrap: wrap; gap: 8px; margin: 24px 0 16px; }
+.ml-lang-btn {
+  padding: 10px 18px; border-radius: 12px; border: 1.5px solid rgba(255,255,255,0.08);
+  background: rgba(255,255,255,0.03); color: var(--text-muted);
+  font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.25s ease;
+  display: flex; align-items: center; gap: 8px;
+}
+.ml-lang-btn:hover { border-color: rgba(232,119,34,0.3); background: rgba(232,119,34,0.06); }
+.ml-lang-btn.active {
+  border-color: rgba(232,119,34,0.5); background: rgba(232,119,34,0.15); color: #f5a623;
+}
+.ml-lang-btn .ml-script { font-size: 18px; }
+.ml-lang-btn .ml-format {
+  font-size: 10px; padding: 2px 6px; border-radius: 8px;
+  background: rgba(255,255,255,0.08); color: var(--text-muted); font-weight: 700; white-space: nowrap;
+}
+.ml-lang-btn.active .ml-format { background: rgba(232,119,34,0.2); color: #f5a623; }
+.ml-more-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  margin-top: 8px; padding: 10px 20px; border-radius: 12px;
+  background: linear-gradient(135deg, rgba(232,119,34,0.12), rgba(245,166,35,0.08));
+  border: 1.5px solid rgba(232,119,34,0.25);
+  font-size: 14px; font-weight: 700; color: #f5a623;
+  letter-spacing: 0.02em;
+}
+/* Phone reuse */
+.ml-phone {
+  width: 320px; height: 693px; border-radius: 40px; overflow: hidden;
+  position: relative;
+  box-shadow: 0 40px 80px rgba(0,0,0,0.25), 0 0 0 1px rgba(255,255,255,0.06);
+  background: #FFFAF5; display: flex; flex-direction: column;
+  font-family: 'Figtree', 'Inter', -apple-system, sans-serif; flex-shrink: 0;
+}
+.ml-phone * { box-sizing: border-box; }
+.ml-screen { display: none; flex-direction: column; height: 100%; }
+.ml-screen.active { display: flex; }
+/* Reuse wt-* classes inside ml-phone for chat elements */
+
+@media (max-width: 1024px) {
+  .ml-layout { gap: 32px; }
+  .ml-left { width: 340px; }
+  .ml-title { font-size: 24px; }
+}
+@media (max-width: 768px) {
+  .ml-layout { flex-direction: column; gap: var(--space-md); align-items: center; }
+  .ml-left { width: 100%; max-width: 400px; text-align: center; }
+  .ml-label { justify-content: center; }
+  .ml-langs { justify-content: center; }
+  .ml-sub { margin-left: auto; margin-right: auto; }
+  .ml-more-badge { margin-left: auto; margin-right: auto; }
+}
+@media (max-width: 480px) {
+  .ml-phone { width: 280px; height: 607px; border-radius: 36px; }
+  .ml-left { max-width: 300px; }
+  .ml-title { font-size: 20px; }
+  .ml-lang-btn { padding: 8px 12px; font-size: 13px; }
+  .ml-lang-btn .ml-script { font-size: 15px; }
+}
+
+/* ═══════════════════════════════════════════════
+   FUNDING SECTION
+   ═══════════════════════════════════════════════ */
+.funding-wrap {
+  text-align: center; max-width: 900px; margin: 0 auto;
+}
+.funding-tagline {
+  font-size: 32px; font-weight: 800; color: var(--text-primary);
+  line-height: 1.3; max-width: 780px; margin: 0 auto var(--space-lg);
+  letter-spacing: -0.02em;
+}
+.funding-tagline .highlight {
+  background: linear-gradient(135deg, #e87722, #f5a623);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+}
+.funding-amount {
+  font-size: 96px; font-weight: 900; letter-spacing: -0.04em;
+  line-height: 1;
+  background: linear-gradient(135deg, var(--neon-orange), var(--neon-gold));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  margin-bottom: 8px;
+}
+.funding-raised {
+  font-size: 18px; font-weight: 600; color: var(--text-muted); margin-bottom: var(--space-lg);
+  text-transform: uppercase; letter-spacing: 0.15em;
+}
+.funding-backers {
+  display: flex; justify-content: center; align-items: center; gap: 40px;
+  margin-top: var(--space-md);
+}
+.funding-backer {
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+}
+.funding-backer-name {
+  font-size: 22px; font-weight: 800; color: var(--text-primary);
+  letter-spacing: -0.01em;
+}
+.funding-backer-type {
+  font-size: 11px; font-weight: 600; color: var(--text-muted);
+  text-transform: uppercase; letter-spacing: 0.12em;
+}
+.funding-divider {
+  width: 1px; height: 50px; background: var(--border-glass); opacity: 0.4;
+}
+.funding-trust-line {
+  margin-top: var(--space-lg); font-size: 14px; color: var(--text-muted);
+  line-height: 1.6; max-width: 580px; margin-left: auto; margin-right: auto;
+}
+@media (max-width: 768px) {
+  .funding-tagline { font-size: 24px; max-width: 500px; }
+  .funding-amount { font-size: 72px; }
+  .funding-backer-name { font-size: 18px; }
+  .funding-backers { gap: 24px; }
+}
+@media (max-width: 480px) {
+  .funding-tagline { font-size: 20px; }
+  .funding-amount { font-size: 56px; }
+  .funding-raised { font-size: 14px; }
+  .funding-backers { flex-direction: column; gap: 16px; }
+  .funding-divider { width: 60px; height: 1px; }
+  .funding-backer-name { font-size: 16px; }
+  .funding-trust-line { font-size: 12px; }
+}
+
+/* ═══════════════════════════════════════════════
+   RESPONSIVE — COMPREHENSIVE
+   ═══════════════════════════════════════════════ */
+
+/* ── Large tablets / small laptops (≤ 1024px) ── */
+@media (max-width: 1024px) {
+  .section-inner { max-width: 900px; }
+  .section { padding: var(--space-section) clamp(1.5rem, 4vw, 3rem); }
+  .product-layout { grid-template-columns: 1fr 1.4fr; gap: var(--space-md); }
+  .product-phone img { max-width: 260px; }
+  .integration-layout { gap: var(--space-md); }
+  .proposal-grid { gap: var(--space-md); }
+  .india-map-svg { max-height: 500px; }
+}
+
+/* ── Tablets (≤ 768px) ── */
+@media (max-width: 768px) {
+  .section { min-height: auto; padding: clamp(2rem, 4vw, 4rem) clamp(1rem, 3vw, 2rem); }
+  .nav-dots { display: none; }
+
+  /* Hero */
+  .hero-headline { font-size: clamp(2rem, 1.2rem + 4vw, 3.5rem); }
+  .hero-sub { font-size: 1rem; }
+  .voice-wave { height: 30px; }
+  .voice-wave .bar { width: 3px; }
+
+  /* Problem */
+  .stats-grid { grid-template-columns: repeat(2, 1fr); gap: var(--space-sm); }
+  .stat-value { font-size: clamp(2rem, 1.5rem + 2vw, 3rem); }
+
+  /* Solution */
+  .solution-grid { grid-template-columns: 1fr; }
+
+  /* Product */
+  .product-layout { grid-template-columns: 1fr; text-align: center; }
+  .product-phone { position: static; margin-bottom: var(--space-md); display: flex; justify-content: center; }
+  .product-phone img { max-width: 240px; }
+  .product-grid { grid-template-columns: repeat(2, 1fr); }
+
+  /* Traction */
+  .traction-hero { grid-template-columns: repeat(2, 1fr); }
+  .demo-grid { grid-template-columns: repeat(2, 1fr); }
+
+  /* Integration / Map */
+  .integration-layout { grid-template-columns: 1fr; }
+  .map-container { max-width: 500px; margin: 0 auto; }
+  .integration-quote { font-size: 1rem; padding: var(--space-sm); }
+
+  /* Proposal */
+  .proposal-grid { grid-template-columns: 1fr; }
+
+  /* Thank you */
+  .thankyou-headline { font-size: clamp(2rem, 1.5rem + 3vw, 3.5rem); }
+
+  /* Footer */
+  .ministry-footer { padding: var(--space-sm) var(--space-md); }
+}
+
+/* ── Small tablets / large phones (≤ 600px) ── */
+@media (max-width: 600px) {
+  .headline { font-size: clamp(1.8rem, 1.2rem + 3vw, 2.5rem); }
+  .subheadline { font-size: 0.95rem; }
+  .section-label { font-size: 0.65rem; }
+
+  .stats-grid { grid-template-columns: 1fr 1fr; }
+  .product-grid { grid-template-columns: 1fr; }
+  .traction-hero { grid-template-columns: 1fr 1fr; }
+  .traction-stat .counter { font-size: clamp(2rem, 1.5rem + 1.5vw, 2.5rem); }
+  .demo-grid { grid-template-columns: 1fr 1fr; }
+  .demo-card .demo-value { font-size: 1.5rem; }
+  .demo-card .demo-label { font-size: 0.75rem; }
+
+  .integration-card { padding: var(--space-sm); }
+  .integration-card h3 { font-size: 0.95rem; }
+  .integration-card li { font-size: 0.8rem; }
+
+  .proposal-block { padding: var(--space-sm); }
+  .proposal-block li { font-size: 0.85rem; }
+}
+
+/* ── Phones (≤ 480px) ── */
+@media (max-width: 480px) {
+  .section { padding: clamp(1.5rem, 3vw, 2.5rem) 1rem; }
+  .headline { font-size: clamp(1.5rem, 1rem + 2.5vw, 2rem); }
+
+  .hero-headline { font-size: clamp(1.6rem, 1rem + 3vw, 2.5rem); max-width: 100%; }
+
+  .stats-grid { grid-template-columns: 1fr; }
+  .stat-card { padding: var(--space-sm); }
+
+  .product-phone img { max-width: 200px; }
+
+  .traction-hero { grid-template-columns: 1fr; }
+  .demo-grid { grid-template-columns: 1fr; }
+
+  .map-container { max-width: 100%; }
+  .india-map-svg text { font-size: 11px !important; }
+
+  .glass-card { padding: var(--space-sm); }
+  .made-in-india { font-size: 0.7rem; }
+
+  .thankyou-headline { font-size: clamp(1.6rem, 1rem + 2.5vw, 2.5rem); }
+}
+
+/* ═══════════════════════════════════════════════
+   STAGGER ANIMATIONS
+   ═══════════════════════════════════════════════ */
+.stagger-in > * {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s var(--ease-out-expo),
+              transform 0.5s var(--ease-out-expo);
+}
+
+.section.visible .stagger-in > *:nth-child(1) { transition-delay: 0.1s; opacity: 1; transform: translateY(0); }
+.section.visible .stagger-in > *:nth-child(2) { transition-delay: 0.2s; opacity: 1; transform: translateY(0); }
+.section.visible .stagger-in > *:nth-child(3) { transition-delay: 0.3s; opacity: 1; transform: translateY(0); }
+.section.visible .stagger-in > *:nth-child(4) { transition-delay: 0.4s; opacity: 1; transform: translateY(0); }
+.section.visible .stagger-in > *:nth-child(5) { transition-delay: 0.5s; opacity: 1; transform: translateY(0); }
+.section.visible .stagger-in > *:nth-child(6) { transition-delay: 0.6s; opacity: 1; transform: translateY(0); }
+.section.visible .stagger-in > *:nth-child(7) { transition-delay: 0.7s; opacity: 1; transform: translateY(0); }
+.section.visible .stagger-in > *:nth-child(8) { transition-delay: 0.8s; opacity: 1; transform: translateY(0); }
+
+/* ═══════════════════════════════════════════════
+   ASHOKA CHAKRA WATERMARK
+   ═══════════════════════════════════════════════ */
+#hero::after {
+  content: '';
+  position: absolute;
+  right: -5%;
+  bottom: -10%;
+  width: 500px;
+  height: 500px;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Ccircle cx='100' cy='100' r='90' fill='none' stroke='rgba(255,255,255,0.04)' stroke-width='3'/%3E%3Ccircle cx='100' cy='100' r='15' fill='rgba(255,255,255,0.03)'/%3E%3Cg stroke='rgba(255,255,255,0.035)' stroke-width='1.5'%3E%3Cline x1='100' y1='10' x2='100' y2='55'/%3E%3Cline x1='100' y1='145' x2='100' y2='190'/%3E%3Cline x1='10' y1='100' x2='55' y2='100'/%3E%3Cline x1='145' y1='100' x2='190' y2='100'/%3E%3Cline x1='36' y1='36' x2='68' y2='68'/%3E%3Cline x1='132' y1='132' x2='164' y2='164'/%3E%3Cline x1='164' y1='36' x2='132' y2='68'/%3E%3Cline x1='68' y1='132' x2='36' y2='164'/%3E%3Cline x1='69' y1='19' x2='83' y2='60'/%3E%3Cline x1='117' y1='140' x2='131' y2='181'/%3E%3Cline x1='131' y1='19' x2='117' y2='60'/%3E%3Cline x1='83' y1='140' x2='69' y2='181'/%3E%3Cline x1='19' y1='69' x2='60' y2='83'/%3E%3Cline x1='140' y1='117' x2='181' y2='131'/%3E%3Cline x1='19' y1='131' x2='60' y2='117'/%3E%3Cline x1='140' y1='83' x2='181' y2='69'/%3E%3Cline x1='49' y1='49' x2='74' y2='74'/%3E%3Cline x1='126' y1='126' x2='151' y2='151'/%3E%3Cline x1='151' y1='49' x2='126' y2='74'/%3E%3Cline x1='74' y1='126' x2='49' y2='151'/%3E%3Cline x1='100' y1='15' x2='100' y2='50'/%3E%3Cline x1='100' y1='150' x2='100' y2='185'/%3E%3Cline x1='15' y1='100' x2='50' y2='100'/%3E%3Cline x1='150' y1='100' x2='185' y2='100'/%3E%3C/g%3E%3C/svg%3E") no-repeat center;
+  background-size: contain;
+  pointer-events: none;
+  z-index: -1;
+  opacity: 0.8;
+}
+</style>
+</head>
+<body>
+
+<!-- Theme toggle -->
+<button class="theme-toggle" id="themeToggle" aria-label="Toggle light/dark theme">
+  <div class="toggle-thumb" id="toggleThumb">🌙</div>
+</button>
+
+<!-- Tricolor bar -->
+<div class="tricolor-bar"><span></span><span></span><span></span></div>
+
+<!-- Progress bar -->
+<div class="progress-bar" id="progressBar"></div>
+
+<!-- Neural network canvas -->
+<canvas id="neural-canvas"></canvas>
+
+<!-- Navigation dots -->
+<nav class="nav-dots" id="navDots">
+  <div class="nav-dot active" data-section="hero" data-label="Home"></div>
+  <div class="nav-dot" data-section="problem" data-label="Problem"></div>
+  <div class="nav-dot" data-section="solution" data-label="Solution"></div>
+  <div class="nav-dot" data-section="product" data-label="Product"></div>
+  <div class="nav-dot" data-section="walkthrough" data-label="Demo"></div>
+  <div class="nav-dot" data-section="multilang" data-label="Languages"></div>
+  <div class="nav-dot" data-section="traction" data-label="Traction"></div>
+  <div class="nav-dot" data-section="funding" data-label="Funding"></div>
+  <div class="nav-dot" data-section="integration" data-label="Integration"></div>
+  <div class="nav-dot" data-section="proposal" data-label="Proposal"></div>
+  <div class="nav-dot" data-section="thankyou" data-label="Contact"></div>
+</nav>
+
+<!-- ════════════════════════════════════════════
+     SECTION 1: HERO
+     ════════════════════════════════════════════ -->
+<section class="section" id="hero">
+  <div class="scan-line"></div>
+  <div class="section-inner">
+    <div class="logo-strip">
+      <span class="org">MSDE</span>
+      <span class="sep">×</span>
+      <span class="org">NCVET</span>
+      <span class="sep">×</span>
+      <span class="org">SpeakX</span>
+    </div>
+
+    <div class="hero-badge">
+      <span class="dot"></span>
+      Collaboration Proposal for MSDE & NCVET
+    </div>
+
+    <div class="voice-wave" id="heroWave"></div>
+
+    <h1 class="hero-headline">
+      Making India's Workforce<br>
+      <span class="highlight">Employment-Ready</span><br>
+      Through AI
+    </h1>
+
+    <p class="hero-sub">
+      Bridging the gap between skill and opportunity — through spoken English & confidence.
+    </p>
+
+    <p class="hero-meta">Collaboration Proposal &nbsp;·&nbsp; April 2026</p>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════
+     SECTION 2: THE PROBLEM
+     ════════════════════════════════════════════ -->
+<section class="section" id="problem">
+  <div class="section-inner">
+    <span class="section-label">The Problem</span>
+    <h2 class="headline">
+      India Trains for Skills.<br>
+      But English <span class="highlight">Holds Back</span> Employment.
+    </h2>
+
+    <div class="stats-grid stagger-in">
+      <div class="glass-card stat-card">
+        <div class="stat-value" data-target="10" data-suffix="%">0%</div>
+        <div class="stat-label">of Indians speak English</div>
+        <div class="stat-source">Census of India, 2011</div>
+      </div>
+      <div class="glass-card violet stat-card">
+        <div class="stat-value" data-target="34" data-suffix="%">0%</div>
+        <div class="stat-label">higher wages for English speakers</div>
+        <div class="stat-source">Azam, Chin & Prakash — Univ. of Chicago Press</div>
+      </div>
+      <div class="glass-card orange stat-card">
+        <div class="stat-value" data-target="1" data-prefix="#" data-suffix="">0</div>
+        <div class="stat-label">soft skill deficit: communication</div>
+        <div class="stat-source">India Skills Report 2026 — ETS / CII / AICTE</div>
+      </div>
+    </div>
+
+    <div class="problem-summary">
+      India produces technically skilled workers — but without English communication, they remain under-employed.
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════
+     SECTION 3: THE SOLUTION
+     ════════════════════════════════════════════ -->
+<section class="section" id="solution">
+  <div class="section-inner">
+    <span class="section-label">The Solution</span>
+    <h2 class="headline">
+      SpeakX: Built for India's<br>
+      <span class="highlight">Skilling Ecosystem</span>
+    </h2>
+
+    <div class="solution-grid stagger-in">
+      <div class="glass-card solution-card">
+        <div class="card-icon">⚡</div>
+        <h3>Scalable & Affordable</h3>
+        <ul>
+          <li>AI teacher available 24/7 — practise anytime</li>
+          <li>Works on any basic Android or iOS smartphone</li>
+          <li>₹199/month — easy to use, no training needed</li>
+          <li>15 min/day — fits alongside existing schedules</li>
+        </ul>
+      </div>
+      <div class="glass-card solution-card violet">
+        <div class="card-icon">🗣️</div>
+        <h3>Vernacular-First</h3>
+        <ul>
+          <li>Supports 14 Indian languages</li>
+          <li>Understands Indian accents natively</li>
+          <li>Learn in your language, speak in English</li>
+          <li>Safe, non-judgmental practice environment</li>
+        </ul>
+      </div>
+      <div class="glass-card solution-card orange">
+        <div class="card-icon">💼</div>
+        <h3>Real-Life Practice</h3>
+        <ul>
+          <li>Job interviews & workplace conversations</li>
+          <li>Customer-facing & marketplace scenarios</li>
+          <li>Real-time feedback on pronunciation & grammar</li>
+          <li>Daily practice builds confidence over time</li>
+        </ul>
+      </div>
+    </div>
+
+    <p class="made-in-india">🇮🇳 Made in India. For India.</p>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════
+     SECTION 4: THE PRODUCT
+     ════════════════════════════════════════════ -->
+<section class="section" id="product">
+  <div class="section-inner">
+    <span class="section-label">The Product</span>
+    <h2 class="headline">
+      How <span class="highlight">SpeakX</span> Works
+    </h2>
+
+    <div class="product-layout stagger-in">
+      <div class="product-phone">
+        <img src="sia%20image.webp" alt="SpeakX AI Tutor Sia — voice conversation interface" loading="lazy" width="320" height="569"/>
+      </div>
+      <div class="product-grid">
+        <div class="glass-card product-card">
+          <div class="card-number">01</div>
+          <h3>Grammar Exercises</h3>
+          <p>Interactive grammar lessons tailored to learner's level</p>
+        </div>
+        <div class="glass-card product-card">
+          <div class="card-number">02</div>
+          <h3>Speaking Exercises</h3>
+          <p>Structured speaking practice with real-time AI feedback</p>
+        </div>
+        <div class="glass-card product-card">
+          <div class="card-number">03</div>
+          <h3>Role Plays with AI</h3>
+          <p>Job interviews, workplace, marketplace & customer scenarios</p>
+        </div>
+        <div class="glass-card product-card">
+          <div class="card-number">04</div>
+          <h3>Open Conversations</h3>
+          <p>Talk on any topic with AI teacher — free-flowing practice</p>
+        </div>
+        <div class="glass-card product-card">
+          <div class="card-number">05</div>
+          <h3>Pronunciation & Feedback</h3>
+          <p>Instant correction on pronunciation, grammar & fluency</p>
+        </div>
+        <div class="glass-card product-card">
+          <div class="card-number">06</div>
+          <h3>14 Indian Languages</h3>
+          <p>Learn in your language — Hindi, Tamil, Telugu, Marathi & more</p>
+        </div>
+        <div class="glass-card product-card">
+          <div class="card-number">07</div>
+          <h3>Customisable Courses</h3>
+          <p>Courses can be customised for specific industries, job roles, or institutional requirements</p>
+        </div>
+        <div class="glass-card product-card">
+          <div class="card-number">08</div>
+          <h3>Performance Dashboard</h3>
+          <p>Monitor every learner's progress — completion, fluency scores, and engagement data</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════
+     SECTION 4B: LEARNING EXPERIENCE WALKTHROUGH
+     ════════════════════════════════════════════ -->
+<section class="section" id="walkthrough">
+  <div class="section-inner">
+    <span class="section-label">Learning Experience</span>
+    <h2 class="headline">
+      See the <span class="highlight">AI Companion</span> in Action
+    </h2>
+    <p class="subheadline" style="margin-bottom: var(--space-md);">
+      A live walkthrough of interview practice — voice, word games, quizzes — all inside a single AI chat.
+    </p>
+
+    <div class="walkthrough-layout stagger-in">
+      <!-- LEFT: Controls -->
+      <div class="wt-controls">
+        <div class="wt-screen-list" id="wtScreenList">
+          <div class="wt-screen-card active" data-idx="0"><div class="wt-screen-card-icon">💬</div><div style="flex:1"><div class="wt-screen-card-name">Chat Intro</div><div class="wt-screen-card-desc">AI buddy greets the learner, sets today's topic, and offers learning mode choices.</div></div><div class="wt-screen-card-dot"></div></div>
+          <div class="wt-screen-card" data-idx="1"><div class="wt-screen-card-icon">🎙️</div><div style="flex:1"><div class="wt-screen-card-name">Voice Practice</div><div class="wt-screen-card-desc">Learner speaks a sentence aloud. AI scores pronunciation, fluency, and accuracy.</div></div><div class="wt-screen-card-dot"></div></div>
+          <div class="wt-screen-card" data-idx="2"><div class="wt-screen-card-icon">🧩</div><div style="flex:1"><div class="wt-screen-card-name">Anagram Game</div><div class="wt-screen-card-desc">Scrambled letters — learner taps to spell RESUME. Bilingual meaning revealed.</div></div><div class="wt-screen-card-dot"></div></div>
+          <div class="wt-screen-card" data-idx="3"><div class="wt-screen-card-icon">📝</div><div style="flex:1"><div class="wt-screen-card-name">MCQ Quiz</div><div class="wt-screen-card-desc">Hindi-to-English translation quiz with grammar explanation on correct answer.</div></div><div class="wt-screen-card-dot"></div></div>
+          <div class="wt-screen-card" data-idx="4"><div class="wt-screen-card-icon">🏆</div><div style="flex:1"><div class="wt-screen-card-name">Session Summary</div><div class="wt-screen-card-desc">XP earned, streak, new vocabulary — celebration and next session teaser.</div></div><div class="wt-screen-card-dot"></div></div>
+        </div>
+        <div class="wt-nav-buttons">
+          <button class="wt-nav-btn prev" id="wtPrev" disabled>← Previous</button>
+          <button class="wt-nav-btn next" id="wtNext">Next →</button>
+        </div>
+        <div class="wt-screen-counter" id="wtCounter">Screen 1 of 5</div>
+      </div>
+
+      <!-- RIGHT: Phone -->
+      <div class="wt-phone" id="wtPhone">
+        <!-- ─── SCREEN 1: Chat Intro ─── -->
+        <div class="wt-screen active" data-wt="0">
+          <div class="wt-statusbar"><span>9:41</span><span style="font-size:10px">📶 🔋</span></div>
+          <div class="wt-convo-header">
+            <svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="#121212" stroke-width="2" stroke-linecap="round"><path d="M15 5L5 15M5 5l10 10"/></svg>
+            <div class="wt-avatar"><div class="wt-avatar-eyes"><div class="wt-avatar-eye"></div><div class="wt-avatar-eye"></div></div></div>
+            <div class="wt-header-info"><div class="wt-header-name">Speak<span>X</span> Buddy</div><div class="wt-header-status"><div class="wt-header-dot"></div>AI Tutor</div></div>
+            <div style="width:26px;height:26px;border-radius:50%;border:1px solid #D9DBE2;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0">हि</div>
+            <div class="wt-coins">🪙 120</div>
+          </div>
+          <div style="text-align:center;padding:6px 0 3px"><span style="font-size:10px;font-weight:600;color:#6F23D0;background:#F3EEFF;padding:3px 10px;border-radius:16px">आज · Interview Practice 🎯</span></div>
+          <div class="wt-chat">
+            <!-- msg 1 -->
+            <div class="wt-fadein" data-step="1">
+              <div class="wt-msg-row"><div class="wt-mini-avi"><div style="display:flex;gap:2px"><div class="wt-mini-eye"></div><div class="wt-mini-eye"></div></div></div><div class="wt-bubble-ai"><div style="font-weight:700">Namaste Rahul! 🙏</div><div style="color:#6B7280;font-size:11px;margin-top:3px">Aaj hum interview ki taiyaari karenge. Sabse pehle — <strong>"Tell me about yourself"</strong> practice karte hain!</div></div></div>
+            </div>
+            <!-- msg 2: options -->
+            <div class="wt-fadein" data-step="2">
+              <div class="wt-msg-row"><div class="wt-mini-avi"><div style="display:flex;gap:2px"><div class="wt-mini-eye"></div><div class="wt-mini-eye"></div></div></div><div class="wt-bubble-ai">
+                <div style="font-size:11px;margin-bottom:6px">Kya karna chahoge? 👇</div>
+                <div style="display:flex;flex-direction:column;gap:5px">
+                  <div style="display:flex;align-items:center;gap:8px;padding:8px 9px;border-radius:10px;border:2px solid #FF4D00;background:#FFF5ED"><span style="font-size:17px">🎙️</span><div style="flex:1"><div style="font-size:11px;font-weight:700;color:#121212">Bol ke seekho</div><div style="font-size:10px;color:#6B7280">Sentence bolo, AI check karega</div></div><div style="width:18px;height:18px;border-radius:50%;background:#FF4D00;display:flex;align-items:center;justify-content:center"><svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 6l2.5 2.5 4.5-4.5"/></svg></div></div>
+                  <div style="display:flex;align-items:center;gap:8px;padding:8px 9px;border-radius:10px;border:1.5px solid #EDEDED"><span style="font-size:17px">🧩</span><div><div style="font-size:11px;font-weight:700;color:#121212">Shabd ka khel</div><div style="font-size:10px;color:#6B7280">Letters jod ke word banao</div></div></div>
+                  <div style="display:flex;align-items:center;gap:8px;padding:8px 9px;border-radius:10px;border:1.5px solid #EDEDED"><span style="font-size:17px">📝</span><div><div style="font-size:11px;font-weight:700;color:#121212">Quiz khelo</div><div style="font-size:10px;color:#6B7280">Sahi answer chuno</div></div></div>
+                </div>
+              </div></div>
+            </div>
+            <!-- msg 3: user -->
+            <div class="wt-fadein" data-step="3">
+              <div class="wt-msg-row user"><div class="wt-bubble-user">🎙️ Haan, bol ke seekhte hain!</div></div>
+            </div>
+            <!-- typing indicator (shows between msg3 and msg4) -->
+            <div class="wt-fadein" data-step="3.5" data-typing="1">
+              <div class="wt-msg-row"><div class="wt-mini-avi"><div style="display:flex;gap:2px"><div class="wt-mini-eye"></div><div class="wt-mini-eye"></div></div></div><div class="wt-typing"><div class="wt-typing-dot"></div><div class="wt-typing-dot"></div><div class="wt-typing-dot"></div></div></div>
+            </div>
+            <!-- msg 4 -->
+            <div class="wt-fadein" data-step="4">
+              <div class="wt-msg-row"><div class="wt-mini-avi"><div style="display:flex;gap:2px"><div class="wt-mini-eye"></div><div class="wt-mini-eye"></div></div></div><div class="wt-bubble-ai"><div>Bahut badhiya choice! 🎙️ Chalo shuru karte hain —</div><div style="color:#6B7280;font-size:11px;margin-top:3px">Pehle ek sentence suno, phir bolo. Main check karunga!</div></div></div>
+            </div>
+          </div>
+          <div class="wt-input-bar">
+            <div class="wt-input-field">बोलें या type करें...</div>
+            <div class="wt-kbd-btn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="1.8" stroke-linecap="round"><rect x="2" y="4" width="20" height="16" rx="3"/><path d="M6 8h.01M10 8h.01M14 8h.01M18 8h.01M8 16h8"/></svg></div>
+            <div class="wt-mic-btn"><svg width="15" height="15" viewBox="0 0 24 24" fill="#fff"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0014 0" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round"/></svg></div>
+          </div>
+          <div class="wt-home-ind"></div>
+        </div>
+
+        <!-- ─── SCREEN 2: Voice Practice ─── -->
+        <div class="wt-screen" data-wt="1">
+          <div class="wt-statusbar"><span>9:41</span><span style="font-size:10px">📶 🔋</span></div>
+          <div class="wt-convo-header">
+            <svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="#121212" stroke-width="2" stroke-linecap="round"><path d="M15 5L5 15M5 5l10 10"/></svg>
+            <div class="wt-avatar"><div class="wt-avatar-eyes"><div class="wt-avatar-eye"></div><div class="wt-avatar-eye"></div></div></div>
+            <div class="wt-header-info"><div class="wt-header-name">Speak<span>X</span> Buddy</div><div class="wt-header-status"><div class="wt-header-dot"></div>AI Tutor</div></div>
+            <div style="width:26px;height:26px;border-radius:50%;border:1px solid #D9DBE2;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0">हि</div>
+            <div class="wt-coins">🪙 120</div>
+          </div>
+          <div class="wt-chat">
+            <!-- msg 1 -->
+            <div class="wt-fadein" data-step="1">
+              <div class="wt-msg-row"><div class="wt-mini-avi"><div style="display:flex;gap:2px"><div class="wt-mini-eye"></div><div class="wt-mini-eye"></div></div></div><div class="wt-bubble-ai"><div style="font-weight:600">Yeh sentence bolo 🎙️👇</div><div style="color:#6B7280;font-size:11px;margin-top:2px">Dhyan se suno aur repeat karo</div></div></div>
+            </div>
+            <!-- msg 2: prompt card -->
+            <div class="wt-fadein" data-step="1" style="transition-delay:0.2s">
+              <div class="wt-msg-row"><div class="wt-mini-avi"><div style="display:flex;gap:2px"><div class="wt-mini-eye"></div><div class="wt-mini-eye"></div></div></div><div style="background:#FFF5ED;border:1.5px solid rgba(255,113,0,0.18);border-radius:14px 14px 14px 4px;padding:10px;max-width:82%">
+                <div style="display:flex;align-items:center;gap:10px">
+                  <div style="width:38px;height:38px;border-radius:50%;border:2px solid #FF4D00;background:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="14" height="14" viewBox="0 0 16 16" fill="#FF4D00"><polygon points="4,2 14,8 4,14"/></svg></div>
+                  <div><div style="font-size:14px;font-weight:700;color:#121212;line-height:1.35">"My name is Rahul and I am from Lucknow."</div><div style="font-size:10px;color:#6B7280;margin-top:3px">"मेरा नाम राहुल है और मैं लखनऊ से हूँ।"</div></div>
+                </div>
+              </div></div>
+            </div>
+            <!-- mic recording indicator (transient) -->
+            <div class="wt-fadein" data-step="1.5" data-typing="1">
+              <div style="display:flex;flex-direction:column;align-items:center;gap:6px;padding:10px 0">
+                <div style="width:54px;height:54px;border-radius:14px;background:#C33A3D;display:flex;align-items:center;justify-content:center;animation:wtMicPulse 1.5s ease-in-out infinite">
+                  <div style="display:flex;gap:3px;align-items:center"><div class="wt-eq-bar" style="height:14px"></div><div class="wt-eq-bar" style="height:20px"></div><div class="wt-eq-bar" style="height:10px"></div><div class="wt-eq-bar" style="height:22px"></div><div class="wt-eq-bar" style="height:16px"></div></div>
+                </div>
+                <span style="font-size:10px;color:#C33A3D;font-weight:600">Record ho raha hai...</span>
+              </div>
+            </div>
+            <!-- msg 3: user voice -->
+            <div class="wt-fadein" data-step="2">
+              <div class="wt-msg-row user"><div class="wt-bubble-user">
+                <div style="display:flex;align-items:center;gap:6px;margin-bottom:3px">
+                  <div style="width:20px;height:20px;border-radius:50%;background:rgba(255,255,255,0.25);display:flex;align-items:center;justify-content:center"><svg width="7" height="9" viewBox="0 0 12 14" fill="#fff"><polygon points="0,0 12,7 0,14"/></svg></div>
+                  <div style="display:flex;gap:1.5px;align-items:center;height:16px">
+                    <div style="width:2.5px;border-radius:1.5px;background:rgba(255,255,255,0.5);height:9px"></div><div style="width:2.5px;border-radius:1.5px;background:rgba(255,255,255,0.5);height:14px"></div><div style="width:2.5px;border-radius:1.5px;background:rgba(255,255,255,0.5);height:6px"></div><div style="width:2.5px;border-radius:1.5px;background:rgba(255,255,255,0.5);height:17px"></div><div style="width:2.5px;border-radius:1.5px;background:rgba(255,255,255,0.5);height:11px"></div><div style="width:2.5px;border-radius:1.5px;background:rgba(255,255,255,0.5);height:15px"></div><div style="width:2.5px;border-radius:1.5px;background:rgba(255,255,255,0.5);height:7px"></div><div style="width:2.5px;border-radius:1.5px;background:rgba(255,255,255,0.5);height:13px"></div><div style="width:2.5px;border-radius:1.5px;background:rgba(255,255,255,0.5);height:17px"></div><div style="width:2.5px;border-radius:1.5px;background:rgba(255,255,255,0.5);height:10px"></div><div style="width:2.5px;border-radius:1.5px;background:rgba(255,255,255,0.5);height:14px"></div><div style="width:2.5px;border-radius:1.5px;background:rgba(255,255,255,0.5);height:7px"></div>
+                  </div>
+                  <span style="font-size:9px;opacity:.7">0:03</span>
+                </div>
+                <div style="font-size:11px;opacity:.85;font-style:italic">"My name is Rahul and I am from Lucknow."</div>
+              </div></div>
+            </div>
+            <!-- msg 4: feedback -->
+            <div class="wt-fadein" data-step="3">
+              <div class="wt-msg-row"><div class="wt-mini-avi"><div style="display:flex;gap:2px"><div class="wt-mini-eye"></div><div class="wt-mini-eye"></div></div></div><div class="wt-bubble-ai">
+                <div style="display:flex;align-items:center;gap:7px;margin-bottom:6px"><div style="width:30px;height:30px;border-radius:50%;background:#E6F7F0;display:flex;align-items:center;justify-content:center;font-size:15px">🎉</div><div><div style="font-size:13px;font-weight:700;color:#02A372">Bahut badhiya!</div><div style="font-size:10px;color:#6B7280">Pronunciation accha hai</div></div></div>
+                <div class="wt-score-row">
+                  <div class="wt-score-pill"><div class="wt-score-val" style="color:#02A372">85%</div><div class="wt-score-lbl">Pronunciation</div></div>
+                  <div class="wt-score-pill"><div class="wt-score-val" style="color:#F5A623">78%</div><div class="wt-score-lbl">Fluency</div></div>
+                  <div class="wt-score-pill"><div class="wt-score-val" style="color:#02A372">92%</div><div class="wt-score-lbl">Accuracy</div></div>
+                </div>
+                <div style="font-size:10px;color:#6B7280;padding-top:5px;margin-top:5px;border-top:1px solid #EDEDED">💡 <strong>Tip:</strong> "Lucknow" mein <strong>ck</strong> ko halka bolo</div>
+              </div></div>
+            </div>
+            <!-- msg 5 -->
+            <div class="wt-fadein" data-step="4">
+              <div class="wt-msg-row"><div class="wt-mini-avi"><div style="display:flex;gap:2px"><div class="wt-mini-eye"></div><div class="wt-mini-eye"></div></div></div><div class="wt-bubble-ai" style="font-size:11px">Ab ek shabd ka khel khelte hain! 🧩</div></div>
+            </div>
+          </div>
+          <div class="wt-input-bar">
+            <div class="wt-input-field">बोलें या type करें...</div>
+            <div class="wt-kbd-btn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="1.8" stroke-linecap="round"><rect x="2" y="4" width="20" height="16" rx="3"/><path d="M6 8h.01M10 8h.01M14 8h.01M18 8h.01M8 16h8"/></svg></div>
+            <div class="wt-mic-btn"><svg width="15" height="15" viewBox="0 0 24 24" fill="#fff"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0014 0" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round"/></svg></div>
+          </div>
+          <div class="wt-home-ind"></div>
+        </div>
+
+        <!-- ─── SCREEN 3: Anagram ─── -->
+        <div class="wt-screen" data-wt="2">
+          <div class="wt-statusbar"><span>9:41</span><span style="font-size:10px">📶 🔋</span></div>
+          <div class="wt-convo-header">
+            <svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="#121212" stroke-width="2" stroke-linecap="round"><path d="M15 5L5 15M5 5l10 10"/></svg>
+            <div class="wt-avatar"><div class="wt-avatar-eyes"><div class="wt-avatar-eye"></div><div class="wt-avatar-eye"></div></div></div>
+            <div class="wt-header-info"><div class="wt-header-name">Speak<span>X</span> Buddy</div><div class="wt-header-status"><div class="wt-header-dot"></div>AI Tutor</div></div>
+            <div style="width:26px;height:26px;border-radius:50%;border:1px solid #D9DBE2;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0">हि</div>
+            <div class="wt-coins">🪙 120</div>
+          </div>
+          <div class="wt-chat">
+            <!-- msg 1 -->
+            <div class="wt-fadein" data-step="1">
+              <div class="wt-msg-row"><div class="wt-mini-avi"><div style="display:flex;gap:2px"><div class="wt-mini-eye"></div><div class="wt-mini-eye"></div></div></div><div class="wt-bubble-ai"><div style="font-weight:600">Shabd ka khel! 🧩</div><div style="color:#6B7280;font-size:11px;margin-top:2px">Letters ko sahi order mein lagao</div></div></div>
+            </div>
+            <!-- msg 2: anagram card -->
+            <div class="wt-fadein" data-step="1" style="transition-delay:0.2s">
+              <div class="wt-msg-row"><div class="wt-mini-avi"><div style="display:flex;gap:2px"><div class="wt-mini-eye"></div><div class="wt-mini-eye"></div></div></div><div class="wt-bubble-ai" style="padding:0;overflow:hidden">
+                <div class="wt-anagram-hdr">
+                  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:3px"><span style="font-size:10px;font-weight:700;color:#FF4D00;text-transform:uppercase;letter-spacing:1px">Anagram</span><span style="font-size:10px;color:#6B7280">⭐ 10 XP</span></div>
+                  <div style="font-size:11px;font-weight:600;color:#121212">Hint: Naukri ke liye yeh document bhejte hain 📄</div>
+                  <div style="font-size:10px;color:#6B7280;margin-top:2px">Job ke liye sabse pehle yeh banate hain</div>
+                </div>
+                <div class="wt-anagram-body">
+                  <div class="wt-letter-slots" id="wtSlots">
+                    <div class="wt-slot" data-pos="0"></div><div class="wt-slot" data-pos="1"></div><div class="wt-slot" data-pos="2"></div><div class="wt-slot" data-pos="3"></div><div class="wt-slot" data-pos="4"></div><div class="wt-slot" data-pos="5"></div>
+                  </div>
+                  <div class="wt-scramble" id="wtChips">
+                    <div class="wt-chip" data-ci="0">S</div><div class="wt-chip" data-ci="1">E</div><div class="wt-chip" data-ci="2">U</div><div class="wt-chip" data-ci="3">R</div><div class="wt-chip" data-ci="4">M</div><div class="wt-chip" data-ci="5">E</div>
+                  </div>
+                </div>
+              </div></div>
+            </div>
+            <!-- msg 3: success -->
+            <div class="wt-fadein" data-step="3">
+              <div class="wt-msg-row"><div class="wt-mini-avi"><div style="display:flex;gap:2px"><div class="wt-mini-eye"></div><div class="wt-mini-eye"></div></div></div><div class="wt-bubble-ai">
+                <div style="display:flex;align-items:center;gap:7px"><span style="font-size:20px">🎉</span><div><div style="font-size:13px;font-weight:700;color:#02A372">Sahi jawab! +10 XP</div><div style="font-size:11px;color:#121212;margin-top:2px"><strong>Resume</strong> = बायोडाटा / रिज़्यूमे</div><div style="font-size:10px;color:#6B7280;margin-top:3px">"Please send your <strong>resume</strong> to our email."</div></div></div>
+              </div></div>
+            </div>
+            <!-- msg 4 -->
+            <div class="wt-fadein" data-step="4">
+              <div class="wt-msg-row"><div class="wt-mini-avi"><div style="display:flex;gap:2px"><div class="wt-mini-eye"></div><div class="wt-mini-eye"></div></div></div><div class="wt-bubble-ai" style="font-size:11px">Chalo ab ek quiz khelte hain! 📝</div></div>
+            </div>
+          </div>
+          <div class="wt-input-bar">
+            <div class="wt-input-field">Message type करें...</div>
+            <div class="wt-kbd-btn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="1.8" stroke-linecap="round"><rect x="2" y="4" width="20" height="16" rx="3"/><path d="M6 8h.01M10 8h.01M14 8h.01M18 8h.01M8 16h8"/></svg></div>
+            <div class="wt-mic-btn"><svg width="15" height="15" viewBox="0 0 24 24" fill="#fff"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0014 0" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round"/></svg></div>
+          </div>
+          <div class="wt-home-ind"></div>
+        </div>
+
+        <!-- ─── SCREEN 4: MCQ Quiz ─── -->
+        <div class="wt-screen" data-wt="3">
+          <div class="wt-statusbar"><span>9:41</span><span style="font-size:10px">📶 🔋</span></div>
+          <div class="wt-exercise-header">
+            <div style="display:flex;align-items:center;gap:10px">
+              <svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="#121212" stroke-width="2" stroke-linecap="round"><path d="M15 5L5 15M5 5l10 10"/></svg>
+              <div style="flex:1"></div>
+              <span style="font-size:10px;color:#6B7280;font-weight:600">हि</span>
+              <span style="font-size:10px;font-weight:700;color:#92400E">🪙 120</span>
+            </div>
+            <div class="wt-progress-track"><div class="wt-progress-fill" id="wtMcqBar" style="width:25%"></div></div>
+          </div>
+          <div class="wt-chat" style="padding:10px 14px 0">
+            <!-- prompt -->
+            <div class="wt-fadein" data-step="1">
+              <div class="wt-mcq-prompt">
+                <h3>"मैं electrical ka kaam karta hoon"</h3>
+                <p>English mein kaise bolenge?</p>
+              </div>
+            </div>
+            <!-- options -->
+            <div class="wt-fadein" data-step="1" style="transition-delay:0.15s">
+              <div id="wtMcqOptions">
+                <div class="wt-mcq-option" data-oi="0"><div class="wt-mcq-circle">A</div><div class="wt-mcq-text">I am do electrical work</div></div>
+                <div class="wt-mcq-option" data-oi="1"><div class="wt-mcq-circle">B</div><div class="wt-mcq-text">I does electrical work</div></div>
+                <div class="wt-mcq-option" data-oi="2" data-correct="1"><div class="wt-mcq-circle">C</div><div class="wt-mcq-text">I do electrical work</div></div>
+                <div class="wt-mcq-option" data-oi="3"><div class="wt-mcq-circle">D</div><div class="wt-mcq-text">I doing electrical work</div></div>
+              </div>
+            </div>
+            <!-- feedback -->
+            <div class="wt-fadein" data-step="3">
+              <div style="margin-top:10px;padding:10px;border-radius:10px;background:#E6F7F0;border:1px solid rgba(2,163,114,0.18)">
+                <div style="font-size:13px;font-weight:700;color:#02A372;margin-bottom:3px">✅ Sahi jawab! +15 XP</div>
+                <div style="font-size:11px;color:#121212;line-height:1.45"><strong>I/You/We/They</strong> ke saath <strong>"do"</strong> lagta hai.<br/><strong>He/She</strong> ke saath <strong>"does"</strong> lagta hai.</div>
+                <div style="font-size:10px;color:#6B7280;margin-top:5px;background:#fff;padding:5px 7px;border-radius:6px">🧠 <strong>Yaad rakho:</strong> I <strong>do</strong>, He <strong>does</strong></div>
+              </div>
+            </div>
+          </div>
+          <div style="padding:6px 14px 22px;flex-shrink:0">
+            <div class="wt-pill-cta" id="wtMcqCta">Answer chuno</div>
+          </div>
+          <div class="wt-home-ind"></div>
+        </div>
+
+        <!-- ─── SCREEN 5: Session Summary ─── -->
+        <div class="wt-screen" data-wt="4">
+          <div class="wt-statusbar"><span>9:41</span><span style="font-size:10px">📶 🔋</span></div>
+          <div class="wt-convo-header">
+            <svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="#121212" stroke-width="2" stroke-linecap="round"><path d="M15 5L5 15M5 5l10 10"/></svg>
+            <div class="wt-avatar"><div class="wt-avatar-eyes"><div class="wt-avatar-eye"></div><div class="wt-avatar-eye"></div></div></div>
+            <div class="wt-header-info"><div class="wt-header-name">Speak<span>X</span> Buddy</div><div class="wt-header-status"><div class="wt-header-dot"></div>AI Tutor</div></div>
+            <div style="width:26px;height:26px;border-radius:50%;border:1px solid #D9DBE2;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0">हि</div>
+            <div class="wt-coins">🪙 120</div>
+          </div>
+          <div class="wt-chat">
+            <!-- msg 1: trophy -->
+            <div class="wt-fadein" data-step="1">
+              <div class="wt-msg-row"><div class="wt-mini-avi"><div style="display:flex;gap:2px"><div class="wt-mini-eye"></div><div class="wt-mini-eye"></div></div></div><div class="wt-bubble-ai" style="text-align:center;padding:10px">
+                <div style="font-size:34px;margin-bottom:3px">🏆</div>
+                <div style="font-size:14px;font-weight:800;color:#121212">Aaj ki practice ho gayi!</div>
+                <div style="font-size:11px;color:#6B7280;margin-top:2px">Bahut accha kiya Rahul 👏</div>
+              </div></div>
+            </div>
+            <!-- msg 2: score card -->
+            <div class="wt-fadein" data-step="2">
+              <div class="wt-msg-row"><div class="wt-mini-avi"><div style="display:flex;gap:2px"><div class="wt-mini-eye"></div><div class="wt-mini-eye"></div></div></div><div class="wt-bubble-ai" style="padding:0;overflow:hidden">
+                <div class="wt-xp-header">
+                  <div style="font-size:10px;font-weight:600;opacity:.85">Aaj ka Score</div>
+                  <div style="font-size:26px;font-weight:900">+40 XP</div>
+                </div>
+                <div style="padding:8px 10px">
+                  <div class="wt-stat-grid">
+                    <div class="wt-stat-item"><div style="font-size:16px;margin-bottom:1px">🎙️</div><div style="font-size:14px;font-weight:800;color:#121212">85%</div><div style="font-size:9px;color:#6B7280;font-weight:600">Voice</div><div style="font-size:8px;color:#02A372;font-weight:600">Badhiya!</div></div>
+                    <div class="wt-stat-item"><div style="font-size:16px;margin-bottom:1px">🧩</div><div style="font-size:14px;font-weight:800;color:#121212">1</div><div style="font-size:9px;color:#6B7280;font-weight:600">Anagram</div><div style="font-size:8px;color:#02A372;font-weight:600">Solve kiya!</div></div>
+                    <div class="wt-stat-item"><div style="font-size:16px;margin-bottom:1px">✅</div><div style="font-size:14px;font-weight:800;color:#121212">1</div><div style="font-size:9px;color:#6B7280;font-weight:600">Quiz</div><div style="font-size:8px;color:#02A372;font-weight:600">Sahi jawab!</div></div>
+                  </div>
+                  <div class="wt-streak-bar">
+                    <span style="font-size:18px">🔥</span>
+                    <div style="flex:1"><div style="font-size:11px;font-weight:800;color:#92400E">3 Din ka streak!</div><div style="font-size:9px;color:#B45309">Lagaataar seekh rahe ho 💪</div></div>
+                    <div style="display:flex;gap:3px">
+                      <div class="wt-streak-dot done">Mo</div><div class="wt-streak-dot done">Tu</div><div class="wt-streak-dot done">We</div>
+                      <div class="wt-streak-dot pending">Th</div><div class="wt-streak-dot pending">Fr</div>
+                    </div>
+                  </div>
+                  <div style="padding:6px 8px;border-radius:6px;background:#E6F7F0;border:1px solid rgba(2,163,114,0.18)">
+                    <div style="font-size:10px;font-weight:700;color:#02A372;margin-bottom:3px">📚 Naye words seekhe:</div>
+                    <div style="display:flex;gap:4px;flex-wrap:wrap">
+                      <span style="padding:2px 7px;border-radius:12px;background:#fff;border:1px solid rgba(2,163,114,0.18);font-size:10px;font-weight:600;color:#121212">resume</span>
+                      <span style="padding:2px 7px;border-radius:12px;background:#fff;border:1px solid rgba(2,163,114,0.18);font-size:10px;font-weight:600;color:#121212">introduce</span>
+                      <span style="padding:2px 7px;border-radius:12px;background:#fff;border:1px solid rgba(2,163,114,0.18);font-size:10px;font-weight:600;color:#121212">electrical</span>
+                    </div>
+                  </div>
+                </div>
+              </div></div>
+            </div>
+            <!-- msg 3 -->
+            <div class="wt-fadein" data-step="3">
+              <div class="wt-msg-row"><div class="wt-mini-avi"><div style="display:flex;gap:2px"><div class="wt-mini-eye"></div><div class="wt-mini-eye"></div></div></div><div class="wt-bubble-ai" style="font-size:11px">Kal <strong>"Why should we hire you?"</strong> practice karenge!</div></div>
+            </div>
+          </div>
+          <div style="padding:6px 14px 22px;flex-shrink:0">
+            <div class="wt-pill-cta active">Aur practice karo →</div>
+          </div>
+          <div class="wt-home-ind"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════
+     SECTION 4C: MULTI-LANGUAGE DEMO
+     ════════════════════════════════════════════ -->
+<section class="section" id="multilang">
+  <div class="section-inner">
+    <span class="section-label">Multilingual Platform</span>
+    <h2 class="headline">
+      Learn English from <span class="highlight">Any Language</span>
+    </h2>
+    <p class="subheadline" style="margin-bottom: var(--space-md);">
+      SpeakX teaches English from the learner's native language. Same AI companion, same learning formats — personalized for every mother tongue across India.
+    </p>
+
+    <div class="ml-layout stagger-in">
+      <!-- LEFT: Language selector -->
+      <div class="ml-left">
+        <div class="ml-langs" id="mlLangs">
+          <div class="ml-lang-btn active" data-lang="hindi"><span class="ml-script">हि</span> Hindi <span class="ml-format">Chat</span></div>
+          <div class="ml-lang-btn" data-lang="tamil"><span class="ml-script">த</span> Tamil <span class="ml-format">Voice</span></div>
+          <div class="ml-lang-btn" data-lang="telugu"><span class="ml-script">తె</span> Telugu <span class="ml-format">Anagram</span></div>
+          <div class="ml-lang-btn" data-lang="malayalam"><span class="ml-script">മ</span> Malayalam <span class="ml-format">MCQ</span></div>
+          <div class="ml-lang-btn" data-lang="kannada"><span class="ml-script">ಕ</span> Kannada <span class="ml-format">Voice</span></div>
+          <div class="ml-lang-btn" data-lang="marathi"><span class="ml-script">म</span> Marathi <span class="ml-format">Chat</span></div>
+        </div>
+        <div class="ml-more-badge">+ 9 more regional languages supported</div>
+      </div>
+
+      <!-- RIGHT: Phone -->
+      <div class="ml-phone" id="mlPhone">
+
+        <!-- ─── Hindi: Chat Intro ─── -->
+        <div class="ml-screen active" data-lang="hindi">
+          <div class="wt-statusbar"><span>9:41</span><span style="font-size:10px">📶 🔋</span></div>
+          <div class="wt-convo-header">
+            <svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="#121212" stroke-width="2" stroke-linecap="round"><path d="M15 5L5 15M5 5l10 10"/></svg>
+            <div class="wt-avatar"><div class="wt-avatar-eyes"><div class="wt-avatar-eye"></div><div class="wt-avatar-eye"></div></div></div>
+            <div class="wt-header-info"><div class="wt-header-name">Speak<span>X</span> Buddy</div><div class="wt-header-status"><div class="wt-header-dot"></div>AI Tutor</div></div>
+            <div style="width:26px;height:26px;border-radius:50%;border:1px solid #D9DBE2;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0;font-weight:700;color:#6F23D0">हि</div>
+            <div class="wt-coins">🪙 120</div>
+          </div>
+          <div style="text-align:center;padding:6px 0 3px"><span style="font-size:10px;font-weight:600;color:#6F23D0;background:#F3EEFF;padding:3px 10px;border-radius:16px">हिंदी → English 🇮🇳</span></div>
+          <div class="wt-chat">
+            <div class="wt-fadein ml-fi" data-step="1">
+              <div class="wt-msg-row"><div class="wt-mini-avi"><div style="display:flex;gap:2px"><div class="wt-mini-eye"></div><div class="wt-mini-eye"></div></div></div><div class="wt-bubble-ai"><div style="font-weight:700">Namaste Rahul! 🙏</div><div style="color:#6B7280;font-size:11px;margin-top:3px">Aaj hum interview ki taiyaari karenge. Sabse pehle — <strong>"Tell me about yourself"</strong> practice karte hain!</div></div></div>
+            </div>
+            <div class="wt-fadein ml-fi" data-step="2">
+              <div class="wt-msg-row"><div class="wt-mini-avi"><div style="display:flex;gap:2px"><div class="wt-mini-eye"></div><div class="wt-mini-eye"></div></div></div><div class="wt-bubble-ai">
+                <div style="font-size:11px;margin-bottom:6px">Kya karna chahoge? 👇</div>
+                <div style="display:flex;flex-direction:column;gap:5px">
+                  <div style="display:flex;align-items:center;gap:8px;padding:8px 9px;border-radius:10px;border:2px solid #FF4D00;background:#FFF5ED"><span style="font-size:17px">🎙️</span><div style="flex:1"><div style="font-size:11px;font-weight:700">Bol ke seekho</div><div style="font-size:10px;color:#6B7280">Sentence bolo, AI check karega</div></div></div>
+                  <div style="display:flex;align-items:center;gap:8px;padding:8px 9px;border-radius:10px;border:1.5px solid #EDEDED"><span style="font-size:17px">🧩</span><div><div style="font-size:11px;font-weight:700">Shabd ka khel</div><div style="font-size:10px;color:#6B7280">Letters jod ke word banao</div></div></div>
+                  <div style="display:flex;align-items:center;gap:8px;padding:8px 9px;border-radius:10px;border:1.5px solid #EDEDED"><span style="font-size:17px">📝</span><div><div style="font-size:11px;font-weight:700">Quiz khelo</div><div style="font-size:10px;color:#6B7280">Sahi answer chuno</div></div></div>
+                </div>
+              </div></div>
+            </div>
+            <div class="wt-fadein ml-fi" data-step="3">
+              <div class="wt-msg-row user"><div class="wt-bubble-user">🎙️ Haan, bol ke seekhte hain!</div></div>
+            </div>
+            <div class="wt-fadein ml-fi" data-step="4">
+              <div class="wt-msg-row"><div class="wt-mini-avi"><div style="display:flex;gap:2px"><div class="wt-mini-eye"></div><div class="wt-mini-eye"></div></div></div><div class="wt-bubble-ai"><div>Bahut badhiya! 🎙️ Chalo shuru karte hain —</div><div style="color:#6B7280;font-size:11px;margin-top:3px">Pehle sentence suno, phir bolo. Main check karunga!</div></div></div>
+            </div>
+          </div>
+          <div class="wt-input-bar"><div class="wt-input-field">बोलें या type करें...</div><div class="wt-kbd-btn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="1.8" stroke-linecap="round"><rect x="2" y="4" width="20" height="16" rx="3"/><path d="M6 8h.01M10 8h.01M14 8h.01M18 8h.01M8 16h8"/></svg></div><div class="wt-mic-btn"><svg width="15" height="15" viewBox="0 0 24 24" fill="#fff"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0014 0" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round"/></svg></div></div>
+          <div class="wt-home-ind"></div>
+        </div>
+
+        <!-- ─── Tamil: Voice Practice ─── -->
+        <div class="ml-screen" data-lang="tamil">
+          <div class="wt-statusbar"><span>9:41</span><span style="font-size:10px">📶 🔋</span></div>
+          <div class="wt-convo-header">
+            <svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="#121212" stroke-width="2" stroke-linecap="round"><path d="M15 5L5 15M5 5l10 10"/></svg>
+            <div class="wt-avatar"><div class="wt-avatar-eyes"><div class="wt-avatar-eye"></div><div class="wt-avatar-eye"></div></div></div>
+            <div class="wt-header-info"><div class="wt-header-name">Speak<span>X</span> Buddy</div><div class="wt-header-status"><div class="wt-header-dot"></div>AI Tutor</div></div>
+            <div style="width:26px;height:26px;border-radius:50%;border:1px solid #D9DBE2;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0;font-weight:700;color:#6F23D0">த</div>
+            <div class="wt-coins">🪙 95</div>
+          </div>
+          <div style="text-align:center;padding:6px 0 3px"><span style="font-size:10px;font-weight:600;color:#6F23D0;background:#F3EEFF;padding:3px 10px;border-radius:16px">தமிழ் → English 🇮🇳</span></div>
+          <div class="wt-chat">
+            <div class="wt-fadein ml-fi" data-step="1">
+              <div class="wt-msg-row"><div class="wt-mini-avi"><div style="display:flex;gap:2px"><div class="wt-mini-eye"></div><div class="wt-mini-eye"></div></div></div><div class="wt-bubble-ai"><div style="font-weight:600">இந்த sentence-ஐ சொல்லுங்க 🎙️👇</div><div style="color:#6B7280;font-size:11px;margin-top:2px">நல்லா கேளுங்க, repeat பண்ணுங்க</div></div></div>
+            </div>
+            <div class="wt-fadein ml-fi" data-step="1" style="transition-delay:0.2s">
+              <div class="wt-msg-row"><div class="wt-mini-avi"><div style="display:flex;gap:2px"><div class="wt-mini-eye"></div><div class="wt-mini-eye"></div></div></div><div style="background:#FFF5ED;border:1.5px solid rgba(255,113,0,0.18);border-radius:14px 14px 14px 4px;padding:10px;max-width:82%">
+                <div style="display:flex;align-items:center;gap:10px">
+                  <div style="width:38px;height:38px;border-radius:50%;border:2px solid #FF4D00;background:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="14" height="14" viewBox="0 0 16 16" fill="#FF4D00"><polygon points="4,2 14,8 4,14"/></svg></div>
+                  <div><div style="font-size:14px;font-weight:700;color:#121212;line-height:1.35">"I completed my diploma in electronics."</div><div style="font-size:10px;color:#6B7280;margin-top:3px">"நான் எலக்ட்ரானிக்ஸ் டிப்ளமா முடித்தேன்."</div></div>
+                </div>
+              </div></div>
+            </div>
+            <div class="wt-fadein ml-fi" data-step="2">
+              <div class="wt-msg-row user"><div class="wt-bubble-user">
+                <div style="display:flex;align-items:center;gap:6px;margin-bottom:3px">
+                  <div style="width:20px;height:20px;border-radius:50%;background:rgba(255,255,255,0.25);display:flex;align-items:center;justify-content:center"><svg width="7" height="9" viewBox="0 0 12 14" fill="#fff"><polygon points="0,0 12,7 0,14"/></svg></div>
+                  <div style="display:flex;gap:1.5px;align-items:center;height:16px"><div style="width:2.5px;border-radius:1.5px;background:rgba(255,255,255,0.5);height:9px"></div><div style="width:2.5px;border-radius:1.5px;background:rgba(255,255,255,0.5);height:14px"></div><div style="width:2.5px;border-radius:1.5px;background:rgba(255,255,255,0.5);height:6px"></div><div style="width:2.5px;border-radius:1.5px;background:rgba(255,255,255,0.5);height:17px"></div><div style="width:2.5px;border-radius:1.5px;background:rgba(255,255,255,0.5);height:11px"></div><div style="width:2.5px;border-radius:1.5px;background:rgba(255,255,255,0.5);height:15px"></div><div style="width:2.5px;border-radius:1.5px;background:rgba(255,255,255,0.5);height:7px"></div><div style="width:2.5px;border-radius:1.5px;background:rgba(255,255,255,0.5);height:13px"></div></div>
+                  <span style="font-size:9px;opacity:.7">0:04</span>
+                </div>
+                <div style="font-size:11px;opacity:.85;font-style:italic">"I completed my diploma in electronics."</div>
+              </div></div>
+            </div>
+            <div class="wt-fadein ml-fi" data-step="3">
+              <div class="wt-msg-row"><div class="wt-mini-avi"><div style="display:flex;gap:2px"><div class="wt-mini-eye"></div><div class="wt-mini-eye"></div></div></div><div class="wt-bubble-ai">
+                <div style="display:flex;align-items:center;gap:7px;margin-bottom:6px"><div style="width:30px;height:30px;border-radius:50%;background:#E6F7F0;display:flex;align-items:center;justify-content:center;font-size:15px">🎉</div><div><div style="font-size:13px;font-weight:700;color:#02A372">மிகவும் நல்லது!</div><div style="font-size:10px;color:#6B7280">Pronunciation super-ah irukku</div></div></div>
+                <div class="wt-score-row">
+                  <div class="wt-score-pill"><div class="wt-score-val" style="color:#02A372">88%</div><div class="wt-score-lbl">Pronunciation</div></div>
+                  <div class="wt-score-pill"><div class="wt-score-val" style="color:#02A372">82%</div><div class="wt-score-lbl">Fluency</div></div>
+                  <div class="wt-score-pill"><div class="wt-score-val" style="color:#02A372">95%</div><div class="wt-score-lbl">Accuracy</div></div>
+                </div>
+              </div></div>
+            </div>
+          </div>
+          <div class="wt-input-bar"><div class="wt-input-field">சொல்லுங்க அல்லது type செய்யுங்க...</div><div class="wt-kbd-btn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="1.8" stroke-linecap="round"><rect x="2" y="4" width="20" height="16" rx="3"/><path d="M6 8h.01M10 8h.01M14 8h.01M18 8h.01M8 16h8"/></svg></div><div class="wt-mic-btn"><svg width="15" height="15" viewBox="0 0 24 24" fill="#fff"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0014 0" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round"/></svg></div></div>
+          <div class="wt-home-ind"></div>
+        </div>
+
+        <!-- ─── Telugu: Anagram ─── -->
+        <div class="ml-screen" data-lang="telugu">
+          <div class="wt-statusbar"><span>9:41</span><span style="font-size:10px">📶 🔋</span></div>
+          <div class="wt-convo-header">
+            <svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="#121212" stroke-width="2" stroke-linecap="round"><path d="M15 5L5 15M5 5l10 10"/></svg>
+            <div class="wt-avatar"><div class="wt-avatar-eyes"><div class="wt-avatar-eye"></div><div class="wt-avatar-eye"></div></div></div>
+            <div class="wt-header-info"><div class="wt-header-name">Speak<span>X</span> Buddy</div><div class="wt-header-status"><div class="wt-header-dot"></div>AI Tutor</div></div>
+            <div style="width:26px;height:26px;border-radius:50%;border:1px solid #D9DBE2;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0;font-weight:700;color:#6F23D0">తె</div>
+            <div class="wt-coins">🪙 80</div>
+          </div>
+          <div style="text-align:center;padding:6px 0 3px"><span style="font-size:10px;font-weight:600;color:#6F23D0;background:#F3EEFF;padding:3px 10px;border-radius:16px">తెలుగు → English 🇮🇳</span></div>
+          <div class="wt-chat">
+            <div class="wt-fadein ml-fi" data-step="1">
+              <div class="wt-msg-row"><div class="wt-mini-avi"><div style="display:flex;gap:2px"><div class="wt-mini-eye"></div><div class="wt-mini-eye"></div></div></div><div class="wt-bubble-ai"><div style="font-weight:600">పదం ఆట! 🧩</div><div style="color:#6B7280;font-size:11px;margin-top:2px">Letters-ని సరైన order-లో పెట్టండి</div></div></div>
+            </div>
+            <div class="wt-fadein ml-fi" data-step="1" style="transition-delay:0.2s">
+              <div class="wt-msg-row"><div class="wt-mini-avi"><div style="display:flex;gap:2px"><div class="wt-mini-eye"></div><div class="wt-mini-eye"></div></div></div><div class="wt-bubble-ai" style="padding:0;overflow:hidden">
+                <div class="wt-anagram-hdr">
+                  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:3px"><span style="font-size:10px;font-weight:700;color:#FF4D00;text-transform:uppercase;letter-spacing:1px">Anagram</span><span style="font-size:10px;color:#6B7280">⭐ 10 XP</span></div>
+                  <div style="font-size:11px;font-weight:600;color:#121212">Hint: మీ బలాలు interview-లో చెప్పాలి 💪</div>
+                  <div style="font-size:10px;color:#6B7280;margin-top:2px">Interview-లో adagutaru</div>
+                </div>
+                <div class="wt-anagram-body">
+                  <div class="wt-letter-slots" id="mlTeluguSlots">
+                    <div class="wt-slot ml-slot" data-pos="0"></div><div class="wt-slot ml-slot" data-pos="1"></div><div class="wt-slot ml-slot" data-pos="2"></div><div class="wt-slot ml-slot" data-pos="3"></div><div class="wt-slot ml-slot" data-pos="4"></div><div class="wt-slot ml-slot" data-pos="5"></div>
+                  </div>
+                  <div class="wt-scramble" id="mlTeluguChips">
+                    <div class="wt-chip ml-chip" data-ci="0">L</div><div class="wt-chip ml-chip" data-ci="1">K</div><div class="wt-chip ml-chip" data-ci="2">S</div><div class="wt-chip ml-chip" data-ci="3">L</div><div class="wt-chip ml-chip" data-ci="4">I</div><div class="wt-chip ml-chip" data-ci="5">S</div>
+                  </div>
+                </div>
+              </div></div>
+            </div>
+            <div class="wt-fadein ml-fi" data-step="3">
+              <div class="wt-msg-row"><div class="wt-mini-avi"><div style="display:flex;gap:2px"><div class="wt-mini-eye"></div><div class="wt-mini-eye"></div></div></div><div class="wt-bubble-ai">
+                <div style="display:flex;align-items:center;gap:7px"><span style="font-size:20px">🎉</span><div><div style="font-size:13px;font-weight:700;color:#02A372">సరైన సమాధానం! +10 XP</div><div style="font-size:11px;color:#121212;margin-top:2px"><strong>Skills</strong> = నైపుణ్యాలు</div><div style="font-size:10px;color:#6B7280;margin-top:3px">"My <strong>skills</strong> include teamwork and problem solving."</div></div></div>
+              </div></div>
+            </div>
+          </div>
+          <div class="wt-input-bar"><div class="wt-input-field">Message type చేయండి...</div><div class="wt-kbd-btn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="1.8" stroke-linecap="round"><rect x="2" y="4" width="20" height="16" rx="3"/><path d="M6 8h.01M10 8h.01M14 8h.01M18 8h.01M8 16h8"/></svg></div><div class="wt-mic-btn"><svg width="15" height="15" viewBox="0 0 24 24" fill="#fff"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0014 0" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round"/></svg></div></div>
+          <div class="wt-home-ind"></div>
+        </div>
+
+        <!-- ─── Malayalam: MCQ ─── -->
+        <div class="ml-screen" data-lang="malayalam">
+          <div class="wt-statusbar"><span>9:41</span><span style="font-size:10px">📶 🔋</span></div>
+          <div class="wt-exercise-header">
+            <div style="display:flex;align-items:center;gap:10px">
+              <svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="#121212" stroke-width="2" stroke-linecap="round"><path d="M15 5L5 15M5 5l10 10"/></svg>
+              <div style="flex:1"></div>
+              <span style="font-size:10px;color:#6B7280;font-weight:600">മ</span>
+              <span style="font-size:10px;font-weight:700;color:#92400E">🪙 110</span>
+            </div>
+            <div class="wt-progress-track"><div class="wt-progress-fill ml-mcq-bar" style="width:25%"></div></div>
+          </div>
+          <div style="text-align:center;padding:8px 0 4px"><span style="font-size:10px;font-weight:600;color:#6F23D0;background:#F3EEFF;padding:3px 10px;border-radius:16px">മലയാളം → English 🇮🇳</span></div>
+          <div class="wt-chat" style="padding:10px 14px 0">
+            <div class="wt-fadein ml-fi" data-step="1">
+              <div class="wt-mcq-prompt">
+                <h3>"എനിക്ക് കമ്പ്യൂട്ടർ നന്നാക്കാൻ അറിയാം"</h3>
+                <p>English-ൽ എങ്ങനെ പറയും?</p>
+              </div>
+            </div>
+            <div class="wt-fadein ml-fi" data-step="1" style="transition-delay:0.15s">
+              <div id="mlMcqOptions">
+                <div class="wt-mcq-option ml-mcq-opt" data-oi="0"><div class="wt-mcq-circle">A</div><div class="wt-mcq-text">I am know computer repair</div></div>
+                <div class="wt-mcq-option ml-mcq-opt" data-oi="1" data-correct="1"><div class="wt-mcq-circle">B</div><div class="wt-mcq-text">I know how to repair computers</div></div>
+                <div class="wt-mcq-option ml-mcq-opt" data-oi="2"><div class="wt-mcq-circle">C</div><div class="wt-mcq-text">I knowing computer repair</div></div>
+                <div class="wt-mcq-option ml-mcq-opt" data-oi="3"><div class="wt-mcq-circle">D</div><div class="wt-mcq-text">I repairs computers know</div></div>
+              </div>
+            </div>
+            <div class="wt-fadein ml-fi" data-step="3">
+              <div style="margin-top:10px;padding:10px;border-radius:10px;background:#E6F7F0;border:1px solid rgba(2,163,114,0.18)">
+                <div style="font-size:13px;font-weight:700;color:#02A372;margin-bottom:3px">✅ ശരിയാണ്! +15 XP</div>
+                <div style="font-size:11px;color:#121212;line-height:1.45"><strong>"know how to"</strong> ഉപയോഗിച്ച് ability പറയാം.<br/>"I know how to + verb" = എനിക്ക് ... ചെയ്യാൻ അറിയാം</div>
+                <div style="font-size:10px;color:#6B7280;margin-top:5px;background:#fff;padding:5px 7px;border-radius:6px">🧠 <strong>ഓർക്കുക:</strong> I know how to <strong>cook / drive / code</strong></div>
+              </div>
+            </div>
+          </div>
+          <div style="padding:6px 14px 22px;flex-shrink:0">
+            <div class="wt-pill-cta ml-cta">ഉത്തരം തിരഞ്ഞെടുക്കുക</div>
+          </div>
+          <div class="wt-home-ind"></div>
+        </div>
+
+        <!-- ─── Kannada: Voice Practice ─── -->
+        <div class="ml-screen" data-lang="kannada">
+          <div class="wt-statusbar"><span>9:41</span><span style="font-size:10px">📶 🔋</span></div>
+          <div class="wt-convo-header">
+            <svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="#121212" stroke-width="2" stroke-linecap="round"><path d="M15 5L5 15M5 5l10 10"/></svg>
+            <div class="wt-avatar"><div class="wt-avatar-eyes"><div class="wt-avatar-eye"></div><div class="wt-avatar-eye"></div></div></div>
+            <div class="wt-header-info"><div class="wt-header-name">Speak<span>X</span> Buddy</div><div class="wt-header-status"><div class="wt-header-dot"></div>AI Tutor</div></div>
+            <div style="width:26px;height:26px;border-radius:50%;border:1px solid #D9DBE2;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0;font-weight:700;color:#6F23D0">ಕ</div>
+            <div class="wt-coins">🪙 75</div>
+          </div>
+          <div style="text-align:center;padding:6px 0 3px"><span style="font-size:10px;font-weight:600;color:#6F23D0;background:#F3EEFF;padding:3px 10px;border-radius:16px">ಕನ್ನಡ → English 🇮🇳</span></div>
+          <div class="wt-chat">
+            <div class="wt-fadein ml-fi" data-step="1">
+              <div class="wt-msg-row"><div class="wt-mini-avi"><div style="display:flex;gap:2px"><div class="wt-mini-eye"></div><div class="wt-mini-eye"></div></div></div><div class="wt-bubble-ai"><div style="font-weight:600">ಈ sentence ಹೇಳಿ 🎙️👇</div><div style="color:#6B7280;font-size:11px;margin-top:2px">ಚೆನ್ನಾಗಿ ಕೇಳಿ, repeat ಮಾಡಿ</div></div></div>
+            </div>
+            <div class="wt-fadein ml-fi" data-step="1" style="transition-delay:0.2s">
+              <div class="wt-msg-row"><div class="wt-mini-avi"><div style="display:flex;gap:2px"><div class="wt-mini-eye"></div><div class="wt-mini-eye"></div></div></div><div style="background:#FFF5ED;border:1.5px solid rgba(255,113,0,0.18);border-radius:14px 14px 14px 4px;padding:10px;max-width:82%">
+                <div style="display:flex;align-items:center;gap:10px">
+                  <div style="width:38px;height:38px;border-radius:50%;border:2px solid #FF4D00;background:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="14" height="14" viewBox="0 0 16 16" fill="#FF4D00"><polygon points="4,2 14,8 4,14"/></svg></div>
+                  <div><div style="font-size:14px;font-weight:700;color:#121212;line-height:1.35">"I have 2 years of experience in welding."</div><div style="font-size:10px;color:#6B7280;margin-top:3px">"ನನಗೆ welding-ನಲ್ಲಿ 2 ವರ್ಷಗಳ ಅನುಭವ ಇದೆ."</div></div>
+                </div>
+              </div></div>
+            </div>
+            <div class="wt-fadein ml-fi" data-step="2">
+              <div class="wt-msg-row user"><div class="wt-bubble-user">
+                <div style="display:flex;align-items:center;gap:6px;margin-bottom:3px">
+                  <div style="width:20px;height:20px;border-radius:50%;background:rgba(255,255,255,0.25);display:flex;align-items:center;justify-content:center"><svg width="7" height="9" viewBox="0 0 12 14" fill="#fff"><polygon points="0,0 12,7 0,14"/></svg></div>
+                  <div style="display:flex;gap:1.5px;align-items:center;height:16px"><div style="width:2.5px;border-radius:1.5px;background:rgba(255,255,255,0.5);height:11px"></div><div style="width:2.5px;border-radius:1.5px;background:rgba(255,255,255,0.5);height:16px"></div><div style="width:2.5px;border-radius:1.5px;background:rgba(255,255,255,0.5);height:8px"></div><div style="width:2.5px;border-radius:1.5px;background:rgba(255,255,255,0.5);height:19px"></div><div style="width:2.5px;border-radius:1.5px;background:rgba(255,255,255,0.5);height:12px"></div><div style="width:2.5px;border-radius:1.5px;background:rgba(255,255,255,0.5);height:14px"></div><div style="width:2.5px;border-radius:1.5px;background:rgba(255,255,255,0.5);height:9px"></div><div style="width:2.5px;border-radius:1.5px;background:rgba(255,255,255,0.5);height:15px"></div></div>
+                  <span style="font-size:9px;opacity:.7">0:05</span>
+                </div>
+                <div style="font-size:11px;opacity:.85;font-style:italic">"I have 2 years of experience in welding."</div>
+              </div></div>
+            </div>
+            <div class="wt-fadein ml-fi" data-step="3">
+              <div class="wt-msg-row"><div class="wt-mini-avi"><div style="display:flex;gap:2px"><div class="wt-mini-eye"></div><div class="wt-mini-eye"></div></div></div><div class="wt-bubble-ai">
+                <div style="display:flex;align-items:center;gap:7px;margin-bottom:6px"><div style="width:30px;height:30px;border-radius:50%;background:#E6F7F0;display:flex;align-items:center;justify-content:center;font-size:15px">🎉</div><div><div style="font-size:13px;font-weight:700;color:#02A372">ತುಂಬಾ ಚೆನ್ನಾಗಿದೆ!</div><div style="font-size:10px;color:#6B7280">Pronunciation tumba channagide</div></div></div>
+                <div class="wt-score-row">
+                  <div class="wt-score-pill"><div class="wt-score-val" style="color:#02A372">90%</div><div class="wt-score-lbl">Pronunciation</div></div>
+                  <div class="wt-score-pill"><div class="wt-score-val" style="color:#F5A623">76%</div><div class="wt-score-lbl">Fluency</div></div>
+                  <div class="wt-score-pill"><div class="wt-score-val" style="color:#02A372">94%</div><div class="wt-score-lbl">Accuracy</div></div>
+                </div>
+              </div></div>
+            </div>
+          </div>
+          <div class="wt-input-bar"><div class="wt-input-field">ಹೇಳಿ ಅಥವಾ type ಮಾಡಿ...</div><div class="wt-kbd-btn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="1.8" stroke-linecap="round"><rect x="2" y="4" width="20" height="16" rx="3"/><path d="M6 8h.01M10 8h.01M14 8h.01M18 8h.01M8 16h8"/></svg></div><div class="wt-mic-btn"><svg width="15" height="15" viewBox="0 0 24 24" fill="#fff"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0014 0" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round"/></svg></div></div>
+          <div class="wt-home-ind"></div>
+        </div>
+
+        <!-- ─── Marathi: Chat Intro ─── -->
+        <div class="ml-screen" data-lang="marathi">
+          <div class="wt-statusbar"><span>9:41</span><span style="font-size:10px">📶 🔋</span></div>
+          <div class="wt-convo-header">
+            <svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="#121212" stroke-width="2" stroke-linecap="round"><path d="M15 5L5 15M5 5l10 10"/></svg>
+            <div class="wt-avatar"><div class="wt-avatar-eyes"><div class="wt-avatar-eye"></div><div class="wt-avatar-eye"></div></div></div>
+            <div class="wt-header-info"><div class="wt-header-name">Speak<span>X</span> Buddy</div><div class="wt-header-status"><div class="wt-header-dot"></div>AI Tutor</div></div>
+            <div style="width:26px;height:26px;border-radius:50%;border:1px solid #D9DBE2;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0;font-weight:700;color:#6F23D0">म</div>
+            <div class="wt-coins">🪙 90</div>
+          </div>
+          <div style="text-align:center;padding:6px 0 3px"><span style="font-size:10px;font-weight:600;color:#6F23D0;background:#F3EEFF;padding:3px 10px;border-radius:16px">मराठी → English 🇮🇳</span></div>
+          <div class="wt-chat">
+            <div class="wt-fadein ml-fi" data-step="1">
+              <div class="wt-msg-row"><div class="wt-mini-avi"><div style="display:flex;gap:2px"><div class="wt-mini-eye"></div><div class="wt-mini-eye"></div></div></div><div class="wt-bubble-ai"><div style="font-weight:700">नमस्कार अमित! 🙏</div><div style="color:#6B7280;font-size:11px;margin-top:3px">आज आपण interview ची तयारी करू. आधी — <strong>"Tell me about yourself"</strong> practice करूया!</div></div></div>
+            </div>
+            <div class="wt-fadein ml-fi" data-step="2">
+              <div class="wt-msg-row"><div class="wt-mini-avi"><div style="display:flex;gap:2px"><div class="wt-mini-eye"></div><div class="wt-mini-eye"></div></div></div><div class="wt-bubble-ai">
+                <div style="font-size:11px;margin-bottom:6px">काय करायचं? 👇</div>
+                <div style="display:flex;flex-direction:column;gap:5px">
+                  <div style="display:flex;align-items:center;gap:8px;padding:8px 9px;border-radius:10px;border:2px solid #FF4D00;background:#FFF5ED"><span style="font-size:17px">🎙️</span><div style="flex:1"><div style="font-size:11px;font-weight:700">बोलून शिका</div><div style="font-size:10px;color:#6B7280">Sentence बोला, AI check करेल</div></div></div>
+                  <div style="display:flex;align-items:center;gap:8px;padding:8px 9px;border-radius:10px;border:1.5px solid #EDEDED"><span style="font-size:17px">🧩</span><div><div style="font-size:11px;font-weight:700">शब्दांचा खेळ</div><div style="font-size:10px;color:#6B7280">Letters जोडून word बनवा</div></div></div>
+                  <div style="display:flex;align-items:center;gap:8px;padding:8px 9px;border-radius:10px;border:1.5px solid #EDEDED"><span style="font-size:17px">📝</span><div><div style="font-size:11px;font-weight:700">Quiz खेळा</div><div style="font-size:10px;color:#6B7280">बरोबर उत्तर निवडा</div></div></div>
+                </div>
+              </div></div>
+            </div>
+            <div class="wt-fadein ml-fi" data-step="3">
+              <div class="wt-msg-row user"><div class="wt-bubble-user">🎙️ हो, बोलून शिकूया!</div></div>
+            </div>
+            <div class="wt-fadein ml-fi" data-step="4">
+              <div class="wt-msg-row"><div class="wt-mini-avi"><div style="display:flex;gap:2px"><div class="wt-mini-eye"></div><div class="wt-mini-eye"></div></div></div><div class="wt-bubble-ai"><div>छान! 🎙️ चला सुरू करूया —</div><div style="color:#6B7280;font-size:11px;margin-top:3px">आधी sentence ऐका, मग बोला. मी check करतो!</div></div></div>
+            </div>
+          </div>
+          <div class="wt-input-bar"><div class="wt-input-field">बोला किंवा type करा...</div><div class="wt-kbd-btn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="1.8" stroke-linecap="round"><rect x="2" y="4" width="20" height="16" rx="3"/><path d="M6 8h.01M10 8h.01M14 8h.01M18 8h.01M8 16h8"/></svg></div><div class="wt-mic-btn"><svg width="15" height="15" viewBox="0 0 24 24" fill="#fff"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0014 0" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round"/></svg></div></div>
+          <div class="wt-home-ind"></div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════
+     SECTION 5: WHY SPEAKX (TRACTION)
+     ════════════════════════════════════════════ -->
+<section class="section" id="traction">
+  <div class="section-inner">
+    <span class="section-label">Why SpeakX</span>
+    <h2 class="headline">
+      Already Working <span class="highlight">at Scale</span>
+    </h2>
+
+    <div class="traction-hero stagger-in">
+      <div class="traction-stat">
+        <div class="counter" data-target="14.5" data-suffix="M+" data-decimals="1">0</div>
+        <div class="label">Total Downloads</div>
+      </div>
+      <div class="traction-stat">
+        <div class="counter" data-target="1.5" data-suffix="M+" data-decimals="1">0</div>
+        <div class="label">Monthly Active Learners</div>
+      </div>
+      <div class="traction-stat">
+        <div class="counter" data-target="10" data-suffix="L+" data-decimals="0">0</div>
+        <div class="label">Paid Subscribers</div>
+      </div>
+      <div class="traction-stat">
+        <div class="counter" data-target="60" data-suffix="%">0</div>
+        <div class="label">From Tier 2 & 3 Cities</div>
+      </div>
+    </div>
+
+    <p class="traction-sub">14 Indian Languages Supported</p>
+
+    <h3 style="text-align:center; margin-bottom: var(--space-md); color: var(--text-muted); font-size: 1rem;">
+      Our subscribers mirror India's skilling demographic
+    </h3>
+
+    <div class="demo-grid stagger-in">
+      <div class="glass-card demo-card">
+        <div class="demo-value">43%</div>
+        <div class="demo-label">Learn for jobs & promotions</div>
+      </div>
+      <div class="glass-card demo-card violet">
+        <div class="demo-value" style="color: var(--neon-violet);">62%</div>
+        <div class="demo-label">From Tier 2/3 cities</div>
+      </div>
+      <div class="glass-card demo-card orange">
+        <div class="demo-value" style="color: var(--neon-orange);">82%</div>
+        <div class="demo-label">Earn below ₹50K/month</div>
+      </div>
+      <div class="glass-card demo-card">
+        <div class="demo-value" style="color: var(--neon-gold);">39%</div>
+        <div class="demo-label">10th / 12th / Diploma holders</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════
+     SECTION 5B: FUNDING
+     ════════════════════════════════════════════ -->
+<section class="section" id="funding">
+  <div class="section-inner">
+    <span class="section-label">Backed by the Best</span>
+    <div class="funding-wrap stagger-in">
+      <div class="funding-tagline">
+        India's #1 <span class="highlight">Confidence-Building App</span> for Bharat — Enhancing Job Opportunities for Everyone
+      </div>
+      <div class="funding-amount">$23M+</div>
+      <div class="funding-raised">Total Funding Raised</div>
+      <div class="funding-backers">
+        <div class="funding-backer">
+          <div class="funding-backer-name">Elevation</div>
+          <div class="funding-backer-type">Capital</div>
+        </div>
+        <div class="funding-divider"></div>
+        <div class="funding-backer">
+          <div class="funding-backer-name">WestBridge</div>
+          <div class="funding-backer-type">Capital</div>
+        </div>
+        <div class="funding-divider"></div>
+        <div class="funding-backer">
+          <div class="funding-backer-name">India Quotient</div>
+          <div class="funding-backer-type">Venture Capital</div>
+        </div>
+      </div>
+      <div class="funding-trust-line">
+        Trusted by India's leading investors to build the English proficiency layer for Bharat's workforce.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════
+     SECTION 6: INTEGRATION
+     ════════════════════════════════════════════ -->
+<section class="section" id="integration">
+  <div class="section-inner">
+    <span class="section-label">Where SpeakX Can Integrate</span>
+    <h2 class="headline">
+      Opportunities Within<br>
+      <span class="highlight">MSDE's Ecosystem</span>
+    </h2>
+
+    <div class="integration-layout">
+      <div class="integration-cards stagger-in">
+        <div class="glass-card integration-card">
+          <h3>PMKVY 4.0</h3>
+          <div class="card-sub">Pradhan Mantri Kaushal Vikas Yojana</div>
+          <ul>
+            <li>Customer-facing sectors: Retail, Hospitality, BFSI, Logistics</li>
+            <li>English communication alongside technical training</li>
+            <li>Customisable courses per sector</li>
+          </ul>
+        </div>
+        <div class="glass-card integration-card">
+          <h3>PM-SETU / ITIs</h3>
+          <div class="card-sub">Industrial Training Institutes</div>
+          <ul>
+            <li>14,600+ ITIs across India</li>
+            <li>Learners practise on their own smartphones</li>
+            <li>Complements existing technical coursework</li>
+          </ul>
+        </div>
+        <div class="glass-card integration-card">
+          <h3>Placement Readiness</h3>
+          <div class="card-sub">AI-Based Evaluation</div>
+          <ul>
+            <li>Spoken English assessment before placement</li>
+            <li>Evaluates fluency, confidence & communication</li>
+            <li>Customised per job role & industry</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="map-container">
+        <!-- Simplified India Map SVG -->
+        <svg class="india-map-svg" viewBox="0 0 800 793" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <radialGradient id="mapGlow" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="rgba(61,155,224,0.15)"/>
+              <stop offset="100%" stop-color="transparent"/>
+            </radialGradient>
+            <filter id="glow">
+              <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+              <feMerge>
+                <feMergeNode in="coloredBlur"/>
+                <feMergeNode in="SourceGraphic"/>
+              </feMerge>
+            </filter>
+          </defs>
+
+          <!-- Official Survey of India outline -->
+          <path d="M 680.8 683 680.66 683.05 679.52 681.55 680.44 679.36 680.8 683 Z M 673.87 652.11 674.47 651.34 674.82 652.81 675.02 650.8 673.4 650.46 673.91 647.78 675 647.19 674.24 646.67 675.02 646.55 675.43 647.83 676.5 647.2 675.13 646.88 674.97 644.92 676.5 644.24 676.38 645.43 677.06 643.66 676.19 643.25 678.3 643.72 678.07 642.31 679.3 642.04 679.55 645.81 678.26 646.19 680.42 647.03 678 647.48 679.41 648.47 677.06 648.27 678.47 649.26 677.84 650.16 680.35 650.38 679.49 655.63 677.45 657.47 676.95 653.88 676.44 656.39 675.09 653.78 676.16 656.03 674.28 656.47 676.22 656.34 675.67 657.55 676.9 658.71 676.11 659.35 675.36 657.7 675.02 659.61 674.19 659.22 675.08 661.03 674.25 661.21 674.26 660.8 673.13 660.59 672.82 658.92 674.24 658.09 672.77 657.32 673.33 654.38 674.38 654.63 673.31 653.66 674.44 653.46 673.87 652.11 Z M 179.36 1 180.38 2.21 182.82 1.76 184.92 4.92 187.65 2.99 190.2 3.78 192.98 1.38 196.54 1.08 199.87 7.37 203.94 8.88 209.25 14.66 216.46 16.82 221.79 20.24 224.18 19.95 227.64 24.04 232.42 24.79 236.73 28.93 234.5 31.28 236.56 34.14 241.84 36.16 244.97 35.55 248.86 38.11 251.8 37.81 254.99 42.88 250.88 42.86 252.33 44.4 260.51 44.59 261.9 43.11 268.71 45.1 267.96 40.82 272.84 42.69 274.9 39.15 276.36 39.66 276.67 37.73 281.19 35.94 283.69 36.52 287.49 34.02 295.56 33.04 300.9 34.45 302.71 30.8 306.18 30.26 307.61 30.42 308.42 32.93 316.91 35.58 320.94 36.18 324.13 34.78 327.22 39.41 332.21 41.29 333.12 44.75 328.75 53.77 325.48 65.72 320.38 66.21 317.6 67.97 318.01 71.89 310.66 71.98 312.57 78.19 309.88 79.59 308.35 84.29 301.13 83.04 299.48 84.39 296.44 83.71 294.18 85.62 298.06 90.75 296.84 92.76 299.14 95.1 293.75 94.95 295.82 102.74 308.58 104.89 306.79 111.17 305.27 111.59 313.05 119.48 308.12 124.93 304.74 123.23 299.82 126.53 298.96 128.93 295.62 130.06 291.13 127.1 289.6 120.31 285.63 123.09 281.43 123.46 280.23 124.86 283.67 127.88 281.69 132.63 285.16 132.78 285.97 136.08 290.63 139.41 288.49 145.05 292.4 149.94 288.99 152.47 293.78 159.45 298.09 153.93 299.88 154.65 303.13 157.51 303.28 159.89 308 165.69 310.57 165.79 312.88 168.36 316.96 166.3 319.95 167.19 326.73 172.54 328.55 171.87 330.24 173.01 329.08 175.74 330.74 178.56 338.42 181.55 340.02 180.75 346.13 185.2 351.9 187.09 352.18 188.23 349.91 188.93 348.34 187.94 344.03 193.71 340.13 194.96 337.18 199.39 333.69 200.68 334.84 204.84 331.94 208.75 330.31 209.02 332.35 212.51 331.82 215.52 330.49 215.07 331.13 217.26 327.6 218.4 325.3 223.39 325.74 225.9 330.71 227.82 337.83 233.34 337.44 230.25 339.22 229.63 348.69 235.92 356.75 238.56 359.68 244.76 361.19 243.57 363.19 244.01 364.05 246.15 375.15 252.31 377.43 250.34 380.2 250.49 390.54 257.16 397.61 255.97 398.37 261.99 410.72 263.3 414.26 266.69 416.76 264.44 416.19 262.61 422.36 262.89 429.17 266.23 428.75 263.52 433.62 263.87 436.87 261.55 440.87 265.2 449.86 266.51 451.75 269.84 450.45 274.45 459.16 276.78 459.31 277.99 461.85 278.8 460.84 279.68 465.39 279.26 465.99 282.31 469.31 282.76 477.5 279.19 480.23 281.28 480.22 285.24 483.42 286.39 483.36 287.47 488.23 284.8 493.42 286.94 496.57 286.1 507.44 291.47 511.89 290.39 516.74 287.01 517.28 290.71 524.09 293.52 524.85 291.87 527.44 291 531.44 292.61 533.27 291.12 535.65 291.81 536.33 290.19 537.95 291.09 539.02 289.71 542.25 293.15 544.68 291.02 547.18 282.57 545.74 276.08 541.71 272.46 543.9 266.54 543.28 262.17 547.45 254.11 545.34 250.7 546.04 249.39 552.97 249.01 555.6 246.94 557.11 247.38 558.72 244.9 564.9 248 566.3 252.33 565.23 257.47 562.92 260.29 564.08 264.6 567.16 266.95 562.44 271.77 565.82 272.71 566.01 277.22 567.23 275.87 567.84 277.5 571.98 278.66 573.04 280.96 579.71 279.47 587.11 281.8 586.4 283.39 592.93 283.88 592.92 282.88 601.97 281.89 602.81 279.67 604.86 279.85 606.42 278.42 616.24 282.03 625.44 281.68 626.62 280.56 633.17 281.69 635.09 280.08 637.48 281.4 642.79 280.99 648.3 277.91 652.81 279.87 654.56 276.79 652.09 273.5 653.24 269.34 652.29 268.68 654.61 267.86 651.7 262.58 641.77 262.52 639.31 258.46 641.57 254.7 639.15 252.33 646.36 253.43 649.28 255.98 657.23 251.97 658.83 251.98 659.8 254.18 665 252.4 666.44 253.2 671.52 248.61 669.45 246.67 670.04 244.93 673.5 242.65 674.08 243.52 677.54 241.35 678.48 242.15 679.16 239.94 684.5 239.51 683.48 236.54 686.14 234.72 687.65 230.96 692.1 229.68 699.96 230.3 701.77 229.11 704.09 230.23 706.05 225.46 710.34 222.27 711.97 218.71 717.81 215.02 720.88 215.09 723.07 211.8 726.09 213.61 727.8 216.68 733.76 217.46 732.95 216.45 744.36 220.28 746.28 217.21 747.63 217.55 747.53 215.23 749.06 214 762.66 208.53 766.87 214.51 770.11 213.14 770.84 214.16 769.78 216.24 763.23 218.96 765.12 221.13 764.83 223.9 769.37 220.35 774.46 219.09 773.13 221.57 777.07 227.12 776.26 228.98 773.19 229.98 773.39 231.44 769.85 233.29 770.33 235.3 767.36 237.3 771.24 239.24 772.92 237.11 777.94 235.91 787.4 240.13 790.62 238.94 798.37 242.76 796.21 246.37 799 248.17 797.94 251.68 794.54 251.16 784.92 259.07 785.1 263.35 792.21 271.82 791.52 273.22 784.31 270.77 784.59 268.62 779.68 265.55 776.97 265.73 774.74 267.88 766.67 268.1 761.07 270.79 758.97 274.3 755.04 275.31 752.91 278.92 751.35 278.36 749.76 280.81 747.58 280.47 744.92 283.87 741.41 285.24 739.54 284.37 737.21 286.19 734.84 290.73 736.75 292.69 736.36 300.24 738.22 301.01 733.47 305.79 734.48 309.57 731.4 312.07 730.38 314.87 724.51 317.57 723.17 319.52 721.56 324.45 725.97 326.63 725.32 332.09 722.37 338.15 720.85 338.14 720.3 340.72 716.85 344.62 710.05 361.6 709.14 362.16 703.95 358.95 700.59 359.58 699.14 357.45 695.57 357.3 692.33 359.17 689.67 355.42 687.52 355.38 690.48 366.14 689.52 374.42 688.27 375.29 689.08 381.24 686.57 384.71 682.01 383.69 683.05 387.33 681.14 390.18 682.38 396.02 681.46 397.8 683.61 400.5 684.07 405.01 682.43 405.49 682.67 407.38 679.6 406.86 680.18 409.42 678.68 409.36 678.76 412.67 677.25 411.38 675.98 413.82 674.83 410.48 670.36 407.95 669.81 411.87 667.72 412.8 665.36 392.47 663.52 387.76 661.41 386.63 660.72 378.46 662.29 378.32 658.88 365.34 657.16 367.1 655.32 364.81 652.99 367.28 650.08 364.86 650.45 371.84 644.77 376.62 646.78 382.35 640.87 386.57 638.77 384.91 637.82 379.88 635.12 377.11 634.33 379.85 635.35 383.13 633.43 382.1 631.87 376.2 632.7 375.06 628.32 368.2 628.23 366.58 629.41 367.24 629.65 366.15 628.17 366.1 628.25 364.64 629.94 364.79 630.9 362.04 630.32 359.59 631.5 359.71 632.25 357.65 634.32 358.27 634.19 354.65 639.96 355.61 641.37 354.78 642.12 351.22 642.75 353.17 644.69 353.73 644.3 350.85 647.02 351.43 648.59 353.86 649.07 348.38 651.15 348.8 650.45 347.1 653.73 347.45 655.75 346.16 655.49 343.32 657.37 343.47 659.34 337.49 657.61 333.02 659.43 332.6 662.18 334.43 664.58 333.81 662.87 329.49 653.27 325.25 644.6 325.45 641.37 326.95 640.61 325.47 636.82 326.65 631.28 324.64 616.68 326.07 614.77 324.9 608.7 326.35 595.76 322.01 592.25 322.3 593.46 313.45 591.66 308.07 593.58 304.5 591.9 304.49 593.14 303.53 590.49 301.97 591.07 300.61 589.78 298.71 587.97 298.54 587.91 296.5 586.69 296.74 587.09 298.51 585.51 298.71 587.11 301.28 585.89 301.26 585.14 303.84 580.94 301.72 579.07 302.77 573.61 299.22 571.75 292.15 568.16 290.44 566.77 291.85 569.25 295.08 570.99 294.99 570.75 296.41 566.59 295.12 565.05 296.7 563.73 294.54 560.26 295.83 560.5 294.26 562.42 293.51 561.26 293.87 559.08 290.14 557.38 290.54 554.01 288.15 552.95 285.91 551.13 289.85 551.76 290.8 552.21 289.68 555.32 290.44 556.36 293.15 554.57 292.72 551.62 295.3 551.64 296.98 546.91 298.96 547.07 302.27 544.42 305.29 545.2 308.52 549.43 308.24 554.46 312.15 554.2 314 556.81 316.42 561.17 317.44 564.21 316.02 565.01 320.37 569.61 322.03 569.58 323.07 568.17 323.34 567.27 325.8 565.1 324.46 564.07 325.65 554.18 324.91 554.43 329.29 552.96 331.79 551.38 331.92 551.1 333.84 549.12 333.64 548.24 331.4 545.84 332.04 546.85 334.12 542.31 339.36 551.19 347.18 562.15 350.05 562.45 353.58 560.99 354.56 563.06 358.08 560.3 361.16 557.79 361.37 557.31 367.17 562.31 371.8 563.93 371.32 562.42 376.49 561.08 376.64 561.7 377.94 569.25 379.03 565.78 382.13 566.09 384.72 565.14 384.62 568.51 389.14 566.94 391.5 568.34 393.22 567.38 394.45 569.26 399.39 569.24 404.37 572.06 408 570.4 409.62 571.25 414.02 569.3 413.54 570.16 412.14 568.51 412.29 569.71 414.83 567.88 414.12 567.68 411.86 566.76 414.16 564.07 413.88 564.5 418.15 565.68 418.7 565.15 422.58 564.03 422.09 564.31 420.08 562.89 420.32 563.74 419.37 562.7 419.41 562.55 418.45 563.39 416.96 562.42 418.38 562.72 420.29 563.06 420.55 564.18 420.25 564.13 421.39 562.4 421.45 561.01 419.14 562.58 412.02 560.6 413.74 559.29 413.43 559.32 411.87 557.67 412.17 556.74 416.1 556.02 414.16 553.48 414.85 555.26 415.68 555.39 416.54 554.28 417.29 554.64 417.85 553.47 417.29 551.43 418.7 550.83 420.14 549.8 417.93 550.54 423.62 549.01 424.24 546.16 413.36 547.93 411.13 547.68 407.7 543.99 406.42 544.38 405.19 543.73 406.57 540.87 404.82 542.26 406.66 545.78 407.14 547.24 409.24 543.59 411.64 541.2 416.15 536.89 420.17 524.87 424.38 518.01 425.37 511.84 430.79 510.12 433.79 510.62 436.88 514.25 443.39 513.25 445.86 514.57 445.76 514.78 447.73 516.37 447.21 508.64 452.57 507.25 456.03 508.67 455.71 509.26 456.86 501.69 462.14 498.61 467.61 477.57 474.27 468.99 478.51 458.36 486.47 436.35 512.82 421.13 521.05 411.39 532.54 394.57 540.95 387.01 547.09 384.88 551.18 386.87 552.88 388.16 552.64 388.06 550.03 387.2 548.99 388 549.55 388.29 551.09 388.26 552.05 387.71 556.73 387.24 557.27 388.27 556.68 387 560.22 386.83 557.73 385.48 560.6 386.86 560.71 370.67 567.59 364.3 566.27 359.33 567.68 356.83 570.31 355.04 576.68 351.13 580.39 351.23 582.71 349.28 583.76 346.13 583.9 345.73 580.32 342.28 579.09 335.4 581.3 331.58 584.33 326.01 595.53 324.98 601.12 326.37 609.28 329.04 614.57 327.35 627.91 330.54 636.13 330.18 640.49 333.13 650.21 327.99 672.37 320.4 683.66 317.17 695.4 319.4 702.87 320.44 731.43 317.7 732.31 316.84 731.16 317.36 732.32 307.21 731.05 304.55 732.56 302.39 736.67 303.67 738.67 299.44 742.67 294.36 751.07 293.69 754.26 296.76 757.97 301.43 759.32 305.09 758.15 305.25 759.85 308.29 762.73 302.12 759.33 295.83 759.54 280.26 764 274.2 769.13 273.42 772.58 274.52 773.56 272.54 776.18 272.67 780.77 270.95 784.15 262.14 789.51 257.57 790.6 256.85 792.21 250.43 791.01 242.12 784.65 229.44 769.66 223.53 755 221.1 740.63 207.11 702.53 204.06 699.44 201.11 692.49 194.05 684.93 192.71 684.98 182.43 661.97 176.57 634.23 173.95 630.92 169.63 616.34 168.39 616.33 166.73 610.33 165.61 610.97 163.17 609.42 161.04 603.39 157.55 600.98 158.74 599.56 156.63 593.38 154.02 592.12 151.44 583.66 152.81 583.21 150.37 582.93 149.72 580.01 146.55 577.59 145.08 574.52 141.11 561.19 142.32 559.07 140.23 551.59 140.81 549.16 139.6 547.91 140.34 545.74 137.83 540.5 139.69 540.86 137.19 537.63 138.05 536.68 136.37 533.5 136.26 528.89 132.36 519.85 132.11 516.01 130.76 515.36 130.94 513.63 132.26 513.67 130.31 511.68 130.47 506.34 128.81 504.08 128.96 499.33 131.13 498.82 132.52 500.27 132.5 497.58 130.4 498.02 131.51 495.25 129.3 493.48 127.26 496.84 128.22 492.81 126.58 486.46 127.99 484.94 125.66 483.76 124.66 474.86 122.85 471.04 125.04 467.58 125.98 458.86 129.84 450.81 126.63 441.64 127.72 440.79 125.93 441.16 125.56 437.45 122.25 436.73 123.27 433.35 121.72 431.57 121.74 428.88 124.09 427.13 121.15 428.19 125.8 425.08 125.92 424.03 127.23 423.45 127.99 422.33 127.94 421.72 131.62 421.08 120.17 421.45 122.35 415.36 124.2 415.39 124.22 413.77 125.76 413.08 125.13 412.28 124.65 413.46 120.22 414.62 119.69 413.28 121.19 406.75 126.69 407.89 128.51 404.68 124.41 406.73 120.17 406.1 111.11 413.22 111.95 416.83 110.87 417.13 113.69 422.4 108.27 431.23 108.39 434.06 92.14 440.9 90.04 443.04 77.41 447.6 73.17 447.91 62.69 443.5 55.69 438.5 40.25 422.44 29.35 413.35 21.69 403.68 25.3 399.05 24.41 401.54 26.46 401 26.75 401.93 28.76 400.67 27.69 406.86 32.52 403.24 41.33 402.37 43.39 398.96 45.18 401.88 46.17 399.98 47.22 400.64 50.4 398.25 54.02 398.91 55.78 397.93 58.34 392.39 65.35 387.29 62.55 385.79 65.52 385.99 66.07 384.1 71.69 380.33 73.01 380.4 73.35 382.71 73.33 380.59 76.92 379.57 74.29 379.64 75.12 378.76 73.48 378.07 66.54 380.04 62.33 378.41 58.98 378.78 56.44 380.51 54.81 383.88 56.49 382.85 56.92 386.21 54.04 385.91 54.78 383.94 49.71 387.8 41.62 390.42 34.86 390 36.32 391.07 28.79 389.31 16.85 382.7 17.54 381.61 14.78 380.72 14.41 378.93 13.1 379.28 15.92 377.93 15.62 376.21 14.17 375.41 13.95 376.62 9.35 369.91 11.35 365.33 13.86 364.72 15.05 361.84 7.64 364.88 6.72 368.65 3.74 369.61 1 368.13 1.79 361.09 5.23 359.64 5.64 358.29 16.7 358.38 17.02 349.52 18.21 349.03 19.75 351.79 21.95 349.34 23.59 351.5 26.03 350.1 28.73 351.15 39.67 349.61 43.4 352.93 51.42 352.92 53.74 349.54 66.05 346.11 67.18 346.45 66.33 350.72 70.22 351.71 75.5 350.53 74.72 349.37 81.3 346.61 77.99 345.46 77.66 341.34 80.66 338.8 76.33 331.97 75 326.25 68.88 319.46 68.76 311.13 61.3 311.9 58.07 310.82 53.46 304.69 53.01 300.73 55.52 296.14 55.49 287.95 52.27 286.61 45.91 286.92 37.37 282.71 37.45 275.43 39.45 270.72 51.44 260.34 54.35 253.71 60.9 248.09 66.83 248.12 69.23 250.54 70.93 255.45 74.54 256.44 83.64 252.9 96.23 251.75 102.56 249.47 103.35 245.09 110.96 237.65 113.5 230.13 116 227.38 131.15 220.35 140.33 205.5 143.46 195.29 154.64 191.96 159.17 188.42 156.64 184 159.21 181.7 157.91 181.83 158.13 180.43 158.94 181.36 160.25 179.25 161.9 179.54 162.54 177.12 167.74 173.73 167.03 172.71 171.29 168.15 174.83 166.73 175.43 165.03 178.92 164.5 178.73 163.03 176.38 162.87 175.52 164.3 173.85 162.92 174.98 156.57 177.79 154.89 175.62 152.84 176.73 150.99 173.21 147 175.19 145.83 176.52 142.22 182.28 140.35 183.93 137.75 191.98 137.38 192.75 135.94 193.78 136.74 197.38 133.07 196.03 129.85 192.4 127.6 190.81 128.06 189.99 126.18 187.98 125.65 185.89 127.01 183.87 125.77 178.7 125.93 177.37 122.45 178.9 121.17 177.76 120.21 179.16 116.24 177.41 116.87 177.24 118.76 169.61 118.29 158.96 112.28 155.16 111.82 154.2 112.83 152.9 110.12 150.03 109.62 150.86 106.42 148.05 101.93 150.14 97.5 148.11 95.06 148.83 87.64 146.72 84.66 145.75 76.73 143.44 74.49 144.39 70.4 145.01 69.04 150.38 69.29 152.55 63.55 160.74 60.71 162.92 56.9 161.87 55.74 163.57 54.33 154.69 50.8 151.95 51.26 151.61 47.26 154.25 44.94 153.88 43.06 149.78 41.8 143.49 42.13 136.25 37.93 136.68 34.65 134.92 33.38 130.4 34.43 127.69 33.27 124.01 34.88 119.44 32.44 121.29 29.35 119.43 28.2 120.27 24.43 128.63 20.04 128.8 18.15 132.06 17.55 132.02 16.07 135.28 13.5 134.47 10.91 144.13 9.76 148.81 11.13 156.42 10.89 156.32 9.12 151.88 7.17 150.95 5.15 157.6 5.94 161.19 7.91 164.17 5.18 166.72 5.65 171.56 2.86 175.32 3.89 175.43 1.33 179.36 1 Z"
+                fill-rule="evenodd" fill="none" stroke="rgba(61,155,224,0.25)" stroke-width="1.5" stroke-linejoin="round"/>
+
+          <!-- Background glow -->
+          <ellipse cx="400" cy="400" rx="320" ry="380" fill="url(#mapGlow)"/>
+
+          <!-- City dots — SOI-accurate positions -->
+          <!-- Delhi (Capital) -->
+          <circle class="map-dot" cx="244" cy="229" r="6" fill="var(--saffron)" filter="url(#glow)">
+            <animate attributeName="r" values="5;9;5" dur="2s" repeatCount="indefinite"/>
+          </circle>
+          <text x="218" y="218" fill="var(--saffron)" font-size="17" font-weight="700" font-family="var(--font-mono)">Delhi ★</text>
+
+          <!-- Jaipur -->
+          <circle class="map-dot" cx="208" cy="278" r="5" fill="var(--neon-blue)" filter="url(#glow)">
+            <animate attributeName="r" values="4;7;4" dur="2.2s" repeatCount="indefinite"/>
+          </circle>
+          <text x="165" y="270" fill="var(--text-primary)" font-size="14" font-weight="600" font-family="var(--font-mono)">Jaipur</text>
+
+          <!-- Lucknow -->
+          <circle class="map-dot" cx="349" cy="280" r="5" fill="var(--neon-blue)" filter="url(#glow)">
+            <animate attributeName="r" values="4;7;4" dur="2.3s" repeatCount="indefinite"/>
+          </circle>
+          <text x="360" y="274" fill="var(--text-primary)" font-size="14" font-weight="600" font-family="var(--font-mono)">Lucknow</text>
+
+          <!-- Patna -->
+          <circle class="map-dot" cx="464" cy="313" r="5" fill="var(--neon-green)" filter="url(#glow)">
+            <animate attributeName="r" values="4;7;4" dur="2.5s" repeatCount="indefinite"/>
+          </circle>
+          <text x="475" y="307" fill="var(--text-primary)" font-size="14" font-weight="600" font-family="var(--font-mono)">Patna</text>
+
+          <!-- Surat -->
+          <circle class="map-dot" cx="127" cy="435" r="5" fill="var(--neon-orange)" filter="url(#glow)">
+            <animate attributeName="r" values="4;7;4" dur="1.8s" repeatCount="indefinite"/>
+          </circle>
+          <text x="82" y="430" fill="var(--text-primary)" font-size="14" font-weight="600" font-family="var(--font-mono)">Surat</text>
+
+          <!-- Pune -->
+          <circle class="map-dot" cx="155" cy="507" r="5" fill="var(--neon-blue)" filter="url(#glow)">
+            <animate attributeName="r" values="4;7;4" dur="2.1s" repeatCount="indefinite"/>
+          </circle>
+          <text x="110" y="516" fill="var(--text-primary)" font-size="14" font-weight="600" font-family="var(--font-mono)">Pune</text>
+
+          <!-- Hyderabad -->
+          <circle class="map-dot" cx="282" cy="538" r="5" fill="var(--neon-orange)" filter="url(#glow)">
+            <animate attributeName="r" values="4;7;4" dur="1.9s" repeatCount="indefinite"/>
+          </circle>
+          <text x="293" y="532" fill="var(--text-primary)" font-size="14" font-weight="600" font-family="var(--font-mono)">Hyderabad</text>
+
+          <!-- Visakhapatnam -->
+          <circle class="map-dot" cx="412" cy="530" r="5" fill="var(--neon-gold)" filter="url(#glow)">
+            <animate attributeName="r" values="4;7;4" dur="2.4s" repeatCount="indefinite"/>
+          </circle>
+          <text x="423" y="524" fill="var(--text-primary)" font-size="14" font-weight="600" font-family="var(--font-mono)">Vizag</text>
+
+          <!-- Bengaluru -->
+          <circle class="map-dot" cx="258" cy="659" r="5" fill="var(--neon-green)" filter="url(#glow)">
+            <animate attributeName="r" values="4;7;4" dur="2.6s" repeatCount="indefinite"/>
+          </circle>
+          <text x="205" y="668" fill="var(--text-primary)" font-size="14" font-weight="600" font-family="var(--font-mono)">Bengaluru</text>
+
+          <!-- Chennai -->
+          <circle class="map-dot" cx="331" cy="656" r="5" fill="var(--neon-blue)" filter="url(#glow)">
+            <animate attributeName="r" values="4;7;4" dur="2.0s" repeatCount="indefinite"/>
+          </circle>
+          <text x="342" y="664" fill="var(--text-primary)" font-size="14" font-weight="600" font-family="var(--font-mono)">Chennai</text>
+
+          <!-- Connection lines between cities -->
+          <line x1="244" y1="229" x2="208" y2="278" stroke="rgba(232,119,34,0.12)" stroke-width="0.8"/>
+          <line x1="244" y1="229" x2="349" y2="280" stroke="rgba(61,155,224,0.12)" stroke-width="0.8"/>
+          <line x1="349" y1="280" x2="464" y2="313" stroke="rgba(61,155,224,0.12)" stroke-width="0.8"/>
+          <line x1="127" y1="435" x2="155" y2="507" stroke="rgba(232,119,34,0.12)" stroke-width="0.8"/>
+          <line x1="155" y1="507" x2="282" y2="538" stroke="rgba(61,155,224,0.12)" stroke-width="0.8"/>
+          <line x1="282" y1="538" x2="412" y2="530" stroke="rgba(232,119,34,0.12)" stroke-width="0.8"/>
+          <line x1="282" y1="538" x2="258" y2="659" stroke="rgba(46,170,90,0.12)" stroke-width="0.8"/>
+          <line x1="258" y1="659" x2="331" y2="656" stroke="rgba(61,155,224,0.12)" stroke-width="0.8"/>
+
+          <!-- ITI count badge -->
+          <rect x="170" y="740" rx="14" ry="14" width="460" height="48" fill="rgba(232,119,34,0.08)" stroke="rgba(232,119,34,0.2)" stroke-width="1.5"/>
+          <text x="400" y="770" fill="var(--neon-orange)" font-size="20" font-weight="700" font-family="var(--font-mono)" text-anchor="middle">
+            14,600+ ITIs across India  ·  60% from Tier 2 &amp; 3 cities
+          </text>
+        </svg>
+      </div>
+    </div>
+
+    <div class="integration-quote">
+      We built the technology. The government has the distribution.<br>
+      Together, English becomes accessible to all.
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════
+     SECTION 7: THE PROPOSAL
+     ════════════════════════════════════════════ -->
+<section class="section" id="proposal">
+  <div class="section-inner">
+    <span class="section-label">The Proposal</span>
+    <h2 class="headline">
+      Proposed Pilot:<br>
+      <span class="highlight">PMKVY 4.0 + SpeakX</span>
+    </h2>
+
+    <div class="proposal-grid stagger-in">
+      <div class="glass-card proposal-block">
+        <h3><span class="icon-circle">🎯</span> Pilot Structure</h3>
+        <ul>
+          <li><strong>Target:</strong> PMKVY 4.0 trainees in customer-facing sectors</li>
+          <li><strong>Sectors:</strong> Retail, Hospitality, BFSI, Logistics</li>
+          <li><strong>Scope:</strong> 1,000 – 5,000 Trainees</li>
+          <li><strong>Span:</strong> Across 2–3 States | 2–3 Months</li>
+        </ul>
+      </div>
+      <div class="glass-card proposal-block">
+        <h3><span class="icon-circle">🤖</span> SpeakX Provides</h3>
+        <ul>
+          <li>Full AI Tutor Access for all trainees</li>
+          <li>14 Indian Languages supported</li>
+          <li>Progress Dashboards for tracking</li>
+          <li>Real-time feedback on spoken English</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="proposal-quote">
+      "No Indian should be held back from employment because they lacked the confidence to speak."
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════
+     SECTION 8: THANK YOU
+     ════════════════════════════════════════════ -->
+<section class="section" id="thankyou">
+  <div class="section-inner" style="display:flex; flex-direction:column; align-items:center;">
+    <h2 class="thankyou-headline">Thank You</h2>
+    <p class="subheadline" style="text-align:center;">
+      We look forward to exploring this collaboration further.
+    </p>
+
+    <div class="glass-card contact-card">
+      <div class="name">Hansa Thawakar</div>
+      <div class="role">Director — B2B, SpeakX</div>
+      <div class="contact-links">
+        <span>hansa@ivypods.com</span>
+        <span>·</span>
+        <span>+91 99530 32323</span>
+      </div>
+    </div>
+
+    <div class="brand-link">
+      <a href="https://speakx.ai" target="_blank" rel="noopener">speakx.ai</a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+     JAVASCRIPT
+     ═══════════════════════════════════════════════ -->
+<!-- Confidential Footer -->
+<div class="ministry-footer">
+  <span>SpeakX × MSDE & NCVET &nbsp;|&nbsp; Confidential</span>
+  <span>April 2026</span>
+  <span class="page-counter" id="pageCounter">1 / 11</span>
+</div>
+
+<script>
+(function() {
+  'use strict';
+
+  /* ── Theme Toggle ── */
+  const themeToggle = document.getElementById('themeToggle');
+  const toggleThumb = document.getElementById('toggleThumb');
+  const root = document.documentElement;
+
+  var particleColor = { r: 61, g: 155, b: 224 };
+
+  function applyTheme(theme) {
+    root.setAttribute('data-theme', theme);
+    toggleThumb.textContent = theme === 'dark' ? '🌙' : '☀️';
+    particleColor = theme === 'dark'
+      ? { r: 61, g: 155, b: 224 }
+      : { r: 26, g: 90, b: 138 };
+  }
+
+  let currentTheme = localStorage.getItem('speakx-ministry-theme') || 'dark';
+  applyTheme(currentTheme);
+
+  themeToggle.addEventListener('click', () => {
+    currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
+    applyTheme(currentTheme);
+    localStorage.setItem('speakx-ministry-theme', currentTheme);
+  });
+
+  /* ── Neural Network Background ── */
+  const canvas = document.getElementById('neural-canvas');
+  const ctx = canvas.getContext('2d');
+  let particles = [];
+  let animFrame;
+
+  function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+
+  function createParticles() {
+    particles = [];
+    const count = Math.floor((canvas.width * canvas.height) / 18000);
+    for (let i = 0; i < count; i++) {
+      particles.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        vx: (Math.random() - 0.5) * 0.3,
+        vy: (Math.random() - 0.5) * 0.3,
+        r: Math.random() * 1.5 + 0.5,
+        opacity: Math.random() * 0.5 + 0.2
+      });
+    }
+  }
+
+  function drawNetwork() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    const maxDist = 120;
+
+    for (let i = 0; i < particles.length; i++) {
+      const p = particles[i];
+      p.x += p.vx;
+      p.y += p.vy;
+
+      if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
+      if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
+
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(${particleColor.r}, ${particleColor.g}, ${particleColor.b}, ${p.opacity})`;
+      ctx.fill();
+
+      for (let j = i + 1; j < particles.length; j++) {
+        const q = particles[j];
+        const dx = p.x - q.x;
+        const dy = p.y - q.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < maxDist) {
+          ctx.beginPath();
+          ctx.moveTo(p.x, p.y);
+          ctx.lineTo(q.x, q.y);
+          ctx.strokeStyle = `rgba(${particleColor.r}, ${particleColor.g}, ${particleColor.b}, ${0.08 * (1 - dist / maxDist)})`;
+          ctx.lineWidth = 0.5;
+          ctx.stroke();
+        }
+      }
+    }
+
+    animFrame = requestAnimationFrame(drawNetwork);
+  }
+
+  resizeCanvas();
+  createParticles();
+  drawNetwork();
+  window.addEventListener('resize', () => {
+    resizeCanvas();
+    createParticles();
+  });
+
+  /* ── Voice Wave (Hero) ── */
+  const waveContainer = document.getElementById('heroWave');
+  if (waveContainer) {
+    for (let i = 0; i < 24; i++) {
+      const bar = document.createElement('div');
+      bar.className = 'bar';
+      bar.style.animationDelay = `${i * 0.05}s`;
+      waveContainer.appendChild(bar);
+    }
+  }
+
+  /* ── Scroll-triggered section reveal ── */
+  const sections = document.querySelectorAll('.section');
+  const navDots = document.querySelectorAll('.nav-dot');
+  const progressBar = document.getElementById('progressBar');
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+
+        // Trigger counter animations
+        entry.target.querySelectorAll('[data-target]').forEach(el => {
+          if (!el.dataset.animated) {
+            animateCounter(el);
+            el.dataset.animated = 'true';
+          }
+        });
+      }
+    });
+  }, { threshold: 0.15 });
+
+  sections.forEach(sec => observer.observe(sec));
+
+  /* ── Page counter ── */
+  const pageCounter = document.getElementById('pageCounter');
+
+  /* ── Active nav dot on scroll ── */
+  function updateNav() {
+    const scrollY = window.scrollY;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const progress = (scrollY / docHeight) * 100;
+    progressBar.style.width = progress + '%';
+
+    let currentIdx = 0;
+    sections.forEach((sec, i) => {
+      const rect = sec.getBoundingClientRect();
+      if (rect.top < window.innerHeight * 0.5) currentIdx = i;
+    });
+
+    navDots.forEach((dot, i) => {
+      dot.classList.toggle('active', i === currentIdx);
+    });
+
+    if (pageCounter) {
+      pageCounter.textContent = (currentIdx + 1) + ' / ' + sections.length;
+    }
+  }
+
+  window.addEventListener('scroll', updateNav, { passive: true });
+  updateNav();
+
+  /* ── Nav dot click ── */
+  navDots.forEach(dot => {
+    dot.addEventListener('click', () => {
+      const target = document.getElementById(dot.dataset.section);
+      if (target) target.scrollIntoView({ behavior: 'smooth' });
+    });
+  });
+
+  /* ── Animated Counters ── */
+  function animateCounter(el) {
+    const target = parseFloat(el.dataset.target);
+    const suffix = el.dataset.suffix || '';
+    const prefix = el.dataset.prefix || '';
+    const decimals = parseInt(el.dataset.decimals) || 0;
+    const duration = 1500;
+    const start = performance.now();
+
+    function tick(now) {
+      const elapsed = now - start;
+      const progress = Math.min(elapsed / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3); // ease-out cubic
+      const current = target * eased;
+
+      el.textContent = prefix + current.toFixed(decimals) + suffix;
+
+      if (progress < 1) requestAnimationFrame(tick);
+    }
+
+    requestAnimationFrame(tick);
+  }
+
+  /* ── Make hero visible immediately ── */
+  document.getElementById('hero').classList.add('visible');
+
+  /* ── Walkthrough: Interactive animated screen switcher ── */
+  (function() {
+    var screens = document.querySelectorAll('.wt-screen');
+    var cards = document.querySelectorAll('.wt-screen-card');
+    var prevBtn = document.getElementById('wtPrev');
+    var nextBtn = document.getElementById('wtNext');
+    var counter = document.getElementById('wtCounter');
+    var cur = 0;
+    var timers = [];
+
+    /* ── Animation timings per screen (ms) ── */
+    var TIMINGS = {
+      0: [ // Chat Intro: 4 msgs + typing between 3 and 4
+        { step: 1,   at: 300  },
+        { step: 2,   at: 1200 },
+        { step: 3,   at: 2400 },
+        { step: 3.5, at: 2500 }, // typing indicator
+        { step: 4,   at: 3600 },
+      ],
+      1: [ // Voice: prompt, mic, user voice, feedback, next msg
+        { step: 1,   at: 300  },
+        { step: 1.5, at: 1400 }, // mic recording
+        { step: 2,   at: 3000 },
+        { step: 3,   at: 4500 },
+        { step: 4,   at: 6000 },
+      ],
+      2: [ // Anagram: intro, card, then letter-by-letter, success, next
+        { step: 1,   at: 300  },
+        { step: 'letter', at: 1600, idx: 0 }, // R
+        { step: 'letter', at: 2000, idx: 1 }, // E
+        { step: 'letter', at: 2400, idx: 2 }, // S
+        { step: 'letter', at: 2800, idx: 3 }, // U
+        { step: 'letter', at: 3200, idx: 4 }, // M
+        { step: 'letter', at: 3600, idx: 5 }, // E
+        { step: 3,   at: 4400 },
+        { step: 4,   at: 5600 },
+      ],
+      3: [ // MCQ: prompt+options, select answer, show feedback
+        { step: 1,   at: 300  },
+        { step: 2,   at: 2000 }, // select option C
+        { step: 3,   at: 3400 }, // reveal correct + feedback
+      ],
+      4: [ // Summary: trophy, score card, next msg
+        { step: 1,   at: 300  },
+        { step: 2,   at: 900  },
+        { step: 3,   at: 1700 },
+      ],
+    };
+
+    /* Anagram data */
+    var ANAGRAM_TARGET = ['R','E','S','U','M','E'];
+    var ANAGRAM_SHUF   = ['S','E','U','R','M','E'];
+    var ANAGRAM_ORDER  = [3, 1, 0, 2, 4, 5]; // indices into ANAGRAM_SHUF that produce RESUME
+
+    function clearTimers() {
+      timers.forEach(function(t) { clearTimeout(t); });
+      timers = [];
+    }
+
+    function resetScreen(scr) {
+      /* Hide all fadein elements */
+      scr.querySelectorAll('.wt-fadein').forEach(function(el) {
+        el.classList.remove('show');
+      });
+      /* Reset anagram slots */
+      scr.querySelectorAll('.wt-slot').forEach(function(s) {
+        s.textContent = '';
+        s.className = 'wt-slot';
+      });
+      scr.querySelectorAll('.wt-chip').forEach(function(c) {
+        c.classList.remove('used');
+      });
+      /* Reset MCQ */
+      scr.querySelectorAll('.wt-mcq-option').forEach(function(o) {
+        o.style.borderColor = '#EDEDED';
+        o.style.background = '#fff';
+        var circle = o.querySelector('.wt-mcq-circle');
+        if (circle) {
+          circle.style.borderColor = '#D9DBE2';
+          circle.style.background = 'transparent';
+          circle.style.color = '#6B7280';
+          var oi = o.getAttribute('data-oi');
+          circle.textContent = String.fromCharCode(65 + parseInt(oi));
+        }
+        var txt = o.querySelector('.wt-mcq-text');
+        if (txt) txt.style.fontWeight = '600';
+      });
+      var mcqBar = document.getElementById('wtMcqBar');
+      if (mcqBar) mcqBar.style.width = '25%';
+      var mcqCta = document.getElementById('wtMcqCta');
+      if (mcqCta) { mcqCta.textContent = 'Answer chuno'; mcqCta.classList.remove('active'); }
+    }
+
+    function showStep(scr, step) {
+      scr.querySelectorAll('.wt-fadein').forEach(function(el) {
+        var elStep = parseFloat(el.getAttribute('data-step'));
+        var isTyping = el.getAttribute('data-typing') === '1';
+        if (elStep <= step && !isTyping) {
+          el.classList.add('show');
+        }
+        /* Hide typing indicators when next real msg appears */
+        if (isTyping && elStep < step) {
+          el.classList.remove('show');
+        }
+      });
+    }
+
+    function showTyping(scr, step) {
+      scr.querySelectorAll('.wt-fadein[data-typing="1"]').forEach(function(el) {
+        var elStep = parseFloat(el.getAttribute('data-step'));
+        if (Math.abs(elStep - step) < 0.01) {
+          el.classList.add('show');
+        }
+      });
+    }
+
+    function animateAnagramLetter(idx) {
+      var slots = document.querySelectorAll('#wtSlots .wt-slot');
+      var chips = document.querySelectorAll('#wtChips .wt-chip');
+      var chipIdx = ANAGRAM_ORDER[idx];
+      if (chips[chipIdx]) chips[chipIdx].classList.add('used');
+      if (slots[idx]) {
+        slots[idx].textContent = ANAGRAM_TARGET[idx];
+        slots[idx].classList.add('filled');
+      }
+    }
+
+    function completeAnagram() {
+      var slots = document.querySelectorAll('#wtSlots .wt-slot');
+      slots.forEach(function(s) {
+        s.classList.remove('filled');
+        s.classList.add('done');
+      });
+    }
+
+    function animateMCQSelect() {
+      var opts = document.querySelectorAll('#wtMcqOptions .wt-mcq-option');
+      var correct = opts[2]; // option C
+      if (correct) {
+        correct.style.borderColor = '#FF4D00';
+        correct.style.background = '#FFF5ED';
+        var circle = correct.querySelector('.wt-mcq-circle');
+        if (circle) circle.style.borderColor = '#FF4D00';
+      }
+      var mcqBar = document.getElementById('wtMcqBar');
+      if (mcqBar) mcqBar.style.width = '50%';
+    }
+
+    function animateMCQReveal() {
+      var opts = document.querySelectorAll('#wtMcqOptions .wt-mcq-option');
+      opts.forEach(function(o) {
+        var isCorrect = o.getAttribute('data-correct') === '1';
+        if (isCorrect) {
+          o.style.borderColor = '#02A372';
+          o.style.background = '#E6F7F0';
+          var circle = o.querySelector('.wt-mcq-circle');
+          if (circle) { circle.style.borderColor = '#02A372'; circle.style.background = '#02A372'; circle.style.color = '#fff'; circle.textContent = '✓'; }
+          var txt = o.querySelector('.wt-mcq-text');
+          if (txt) txt.style.fontWeight = '700';
+        }
+      });
+      var mcqBar = document.getElementById('wtMcqBar');
+      if (mcqBar) mcqBar.style.width = '75%';
+      var mcqCta = document.getElementById('wtMcqCta');
+      if (mcqCta) { mcqCta.textContent = 'Aage badho →'; mcqCta.classList.add('active'); }
+    }
+
+    function runAnimations(idx) {
+      clearTimers();
+      var scr = screens[idx];
+      resetScreen(scr);
+      var schedule = TIMINGS[idx] || [];
+
+      schedule.forEach(function(entry) {
+        var t = setTimeout(function() {
+          if (entry.step === 'letter') {
+            animateAnagramLetter(entry.idx);
+          } else if (idx === 2 && entry.step === 3) {
+            completeAnagram();
+            showStep(scr, entry.step);
+          } else if (idx === 3 && entry.step === 2) {
+            animateMCQSelect();
+          } else if (idx === 3 && entry.step === 3) {
+            animateMCQReveal();
+            showStep(scr, entry.step);
+          } else if (typeof entry.step === 'number' && entry.step % 1 !== 0) {
+            showTyping(scr, entry.step);
+          } else {
+            showStep(scr, entry.step);
+          }
+        }, entry.at);
+        timers.push(t);
+      });
+    }
+
+    function goTo(idx) {
+      if (idx < 0 || idx >= screens.length) return;
+      screens.forEach(function(s) { s.classList.remove('active'); });
+      cards.forEach(function(c) { c.classList.remove('active'); });
+      screens[idx].classList.add('active');
+      cards[idx].classList.add('active');
+      cur = idx;
+      prevBtn.disabled = cur === 0;
+      nextBtn.disabled = cur === screens.length - 1;
+      counter.textContent = 'Screen ' + (cur + 1) + ' of 5';
+      runAnimations(idx);
+    }
+
+    prevBtn.addEventListener('click', function() { goTo(cur - 1); });
+    nextBtn.addEventListener('click', function() { goTo(cur + 1); });
+    cards.forEach(function(c) {
+      c.addEventListener('click', function() { goTo(parseInt(c.getAttribute('data-idx'))); });
+    });
+
+    /* Auto-start first screen animation when section becomes visible */
+    var started = false;
+    var wtSection = document.getElementById('walkthrough');
+    if (window.IntersectionObserver && wtSection) {
+      var obs = new IntersectionObserver(function(entries) {
+        entries.forEach(function(e) {
+          if (e.isIntersecting && !started) {
+            started = true;
+            runAnimations(0);
+          }
+        });
+      }, { threshold: 0.3 });
+      obs.observe(wtSection);
+    } else {
+      runAnimations(0);
+    }
+  })();
+
+  /* ── Multi-language demo: language switcher + animations ── */
+  (function() {
+    var langBtns = document.querySelectorAll('.ml-lang-btn');
+    var mlScreens = document.querySelectorAll('.ml-screen');
+    var mlTimers = [];
+    var curLang = 'hindi';
+
+    /* Anagram data for Telugu: SKILLS from L,K,S,L,I,S */
+    var ML_ANAGRAM = { target: ['S','K','I','L','L','S'], shuf: ['L','K','S','L','I','S'], order: [4, 1, 2, 0, 3, 5] };
+
+    var ML_TIMINGS = {
+      hindi:     [{ step: 1, at: 300 }, { step: 2, at: 1200 }, { step: 3, at: 2400 }, { step: 4, at: 3600 }],
+      tamil:     [{ step: 1, at: 300 }, { step: 2, at: 2200 }, { step: 3, at: 3800 }],
+      telugu:    [
+        { step: 1, at: 300 },
+        { step: 'letter', at: 1600, idx: 0 },
+        { step: 'letter', at: 2000, idx: 1 },
+        { step: 'letter', at: 2400, idx: 2 },
+        { step: 'letter', at: 2800, idx: 3 },
+        { step: 'letter', at: 3200, idx: 4 },
+        { step: 'letter', at: 3600, idx: 5 },
+        { step: 3, at: 4400 },
+      ],
+      malayalam: [{ step: 1, at: 300 }, { step: 2, at: 2000 }, { step: 3, at: 3400 }],
+      kannada:   [{ step: 1, at: 300 }, { step: 2, at: 2200 }, { step: 3, at: 3800 }],
+      marathi:   [{ step: 1, at: 300 }, { step: 2, at: 1200 }, { step: 3, at: 2400 }, { step: 4, at: 3600 }],
+    };
+
+    function clearMlTimers() { mlTimers.forEach(clearTimeout); mlTimers = []; }
+
+    function resetMlScreen(scr, lang) {
+      scr.querySelectorAll('.wt-fadein.ml-fi').forEach(function(el) { el.classList.remove('show'); });
+      /* Reset Telugu anagram */
+      if (lang === 'telugu') {
+        scr.querySelectorAll('.ml-slot').forEach(function(s) { s.textContent = ''; s.className = 'wt-slot ml-slot'; });
+        scr.querySelectorAll('.ml-chip').forEach(function(c) { c.classList.remove('used'); });
+      }
+      /* Reset Malayalam MCQ */
+      if (lang === 'malayalam') {
+        scr.querySelectorAll('.ml-mcq-opt').forEach(function(o) {
+          o.style.borderColor = '#EDEDED'; o.style.background = '#fff';
+          var circle = o.querySelector('.wt-mcq-circle');
+          if (circle) { circle.style.borderColor = '#D9DBE2'; circle.style.background = 'transparent'; circle.style.color = '#6B7280';
+            circle.textContent = String.fromCharCode(65 + parseInt(o.getAttribute('data-oi'))); }
+          var txt = o.querySelector('.wt-mcq-text'); if (txt) txt.style.fontWeight = '600';
+        });
+        var bar = scr.querySelector('.ml-mcq-bar'); if (bar) bar.style.width = '25%';
+        var cta = scr.querySelector('.ml-cta'); if (cta) { cta.textContent = 'ഉത്തരം തിരഞ്ഞെടുക്കുക'; cta.classList.remove('active'); }
+      }
+    }
+
+    function showMlStep(scr, step) {
+      scr.querySelectorAll('.wt-fadein.ml-fi').forEach(function(el) {
+        var s = parseFloat(el.getAttribute('data-step'));
+        if (s <= step) el.classList.add('show');
+      });
+    }
+
+    function mlAnagramLetter(idx) {
+      var slots = document.querySelectorAll('#mlTeluguSlots .ml-slot');
+      var chips = document.querySelectorAll('#mlTeluguChips .ml-chip');
+      var chipIdx = ML_ANAGRAM.order[idx];
+      if (chips[chipIdx]) chips[chipIdx].classList.add('used');
+      if (slots[idx]) { slots[idx].textContent = ML_ANAGRAM.target[idx]; slots[idx].classList.add('filled'); }
+    }
+
+    function mlAnagramDone() {
+      document.querySelectorAll('#mlTeluguSlots .ml-slot').forEach(function(s) {
+        s.classList.remove('filled'); s.classList.add('done');
+      });
+    }
+
+    function mlMcqSelect() {
+      var opts = document.querySelectorAll('#mlMcqOptions .ml-mcq-opt');
+      var correct = opts[1]; // option B
+      if (correct) { correct.style.borderColor = '#FF4D00'; correct.style.background = '#FFF5ED';
+        var c = correct.querySelector('.wt-mcq-circle'); if (c) c.style.borderColor = '#FF4D00'; }
+      var bar = document.querySelector('.ml-mcq-bar'); if (bar) bar.style.width = '50%';
+    }
+
+    function mlMcqReveal() {
+      var opts = document.querySelectorAll('#mlMcqOptions .ml-mcq-opt');
+      opts.forEach(function(o) {
+        if (o.getAttribute('data-correct') === '1') {
+          o.style.borderColor = '#02A372'; o.style.background = '#E6F7F0';
+          var c = o.querySelector('.wt-mcq-circle');
+          if (c) { c.style.borderColor = '#02A372'; c.style.background = '#02A372'; c.style.color = '#fff'; c.textContent = '✓'; }
+          var t = o.querySelector('.wt-mcq-text'); if (t) t.style.fontWeight = '700';
+        }
+      });
+      var bar = document.querySelector('.ml-mcq-bar'); if (bar) bar.style.width = '75%';
+      var cta = document.querySelector('.ml-cta'); if (cta) { cta.textContent = 'അടുത്തത് →'; cta.classList.add('active'); }
+    }
+
+    function runMlAnimations(lang) {
+      clearMlTimers();
+      var scr = document.querySelector('.ml-screen[data-lang="' + lang + '"]');
+      if (!scr) return;
+      resetMlScreen(scr, lang);
+      var schedule = ML_TIMINGS[lang] || [];
+      schedule.forEach(function(entry) {
+        var t = setTimeout(function() {
+          if (entry.step === 'letter') {
+            mlAnagramLetter(entry.idx);
+          } else if (lang === 'telugu' && entry.step === 3) {
+            mlAnagramDone(); showMlStep(scr, entry.step);
+          } else if (lang === 'malayalam' && entry.step === 2) {
+            mlMcqSelect();
+          } else if (lang === 'malayalam' && entry.step === 3) {
+            mlMcqReveal(); showMlStep(scr, entry.step);
+          } else {
+            showMlStep(scr, entry.step);
+          }
+        }, entry.at);
+        mlTimers.push(t);
+      });
+    }
+
+    function goToLang(lang) {
+      if (lang === curLang) {
+        /* Re-run animations on re-click */
+        runMlAnimations(lang);
+        return;
+      }
+      curLang = lang;
+      mlScreens.forEach(function(s) { s.classList.remove('active'); });
+      langBtns.forEach(function(b) { b.classList.remove('active'); });
+      var target = document.querySelector('.ml-screen[data-lang="' + lang + '"]');
+      var btn = document.querySelector('.ml-lang-btn[data-lang="' + lang + '"]');
+      if (target) target.classList.add('active');
+      if (btn) btn.classList.add('active');
+      runMlAnimations(lang);
+    }
+
+    langBtns.forEach(function(b) {
+      b.addEventListener('click', function() { goToLang(b.getAttribute('data-lang')); });
+    });
+
+    /* Auto-start Hindi when section becomes visible */
+    var mlStarted = false;
+    var mlSection = document.getElementById('multilang');
+    if (window.IntersectionObserver && mlSection) {
+      var mlObs = new IntersectionObserver(function(entries) {
+        entries.forEach(function(e) {
+          if (e.isIntersecting && !mlStarted) { mlStarted = true; runMlAnimations('hindi'); }
+        });
+      }, { threshold: 0.3 });
+      mlObs.observe(mlSection);
+    }
+  })();
+
+})();
+</script>
+</body>
+</html>
